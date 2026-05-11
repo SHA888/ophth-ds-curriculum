@@ -22,12 +22,12 @@
   - [x] T0.2.2 — Document decision rationale in `ARCHITECTURE.md` § Licensing
   - [x] T0.2.3 — Add and commit `LICENSE` file
   - [x] T0.2.4 — Add SPDX header policy to `CONTRIBUTING.md`
-- [ ] **T0.3 — Governance docs**
-  - [ ] T0.3.1 — `CONTRIBUTING.md` (style, commit conventions, PR checklist)
-  - [ ] T0.3.2 — `CODE_OF_CONDUCT.md` (Contributor Covenant v2.1)
-  - [ ] T0.3.3 — `SECURITY.md` (no secrets, no PHI, responsible disclosure)
-  - [ ] T0.3.4 — GitHub issue templates (bug, content, reading-list)
-  - [ ] T0.3.5 — Pull-request template with binary checklist
+- [x] **T0.3 — Governance docs**
+  - [x] T0.3.1 — `CONTRIBUTING.md` (style, commit conventions, PR checklist)
+  - [x] T0.3.2 — `CODE_OF_CONDUCT.md` (Contributor Covenant v2.1)
+  - [x] T0.3.3 — `SECURITY.md` (no secrets, no PHI, responsible disclosure)
+  - [x] T0.3.4 — GitHub issue templates (bug, content, reading-list)
+  - [x] T0.3.5 — Pull-request template with binary checklist
 - [ ] **T0.4 — CI / DevSecOps gates**
   - [ ] T0.4.1 — `markdownlint-cli2` workflow on PR
   - [ ] T0.4.2 — `lychee` link-check workflow (weekly + on PR)
