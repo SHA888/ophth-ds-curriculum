@@ -1,0 +1,115 @@
+---
+title: "Week 1 — Environment & Philosophy"
+---
+
+## Learning Objectives
+
+By the end of this session, you will be able to:
+
+- Explain why reproducibility matters in clinical research
+- Distinguish between reproducibility, repeatability, and replicability
+- Identify common methodological failures that lead to retraction
+- Use Retraction Watch to find case studies of failed research
+- Recognize the hallmarks of irreproducible anesthesia research
+
+## Why Reproducibility Matters
+
+Anesthesia practice depends on evidence. When we choose an induction dose, a monitoring technique, or a rescue protocol, we assume the evidence base is sound. But evidence fails when research cannot be reproduced.
+
+**Clinical stakes:** Irreproducible findings enter guidelines. Incorrect guidelines harm patients. Retractions damage trust in our specialty.
+
+**Your role:** As a clinician who reads and contributes to the literature, you are a gatekeeper. Learn to recognize weak evidence before it shapes your practice.
+
+## Core Concepts
+
+### Definitions
+
+| Term | Meaning | Example |
+|------|---------|---------|
+| **Repeatability** | Same team, same setup, same result | Lab reruns the analysis; gets identical coefficients |
+| **Reproducibility** | Different team, same data, same result | Independent analyst downloads your dataset; recreates your figures |
+| **Replicability** | Different team, different data, similar result | New study in different hospital confirms your finding |
+
+We focus on **reproducibility** in this tier. It is the foundation — without it, replicability is meaningless.
+
+### The Reproducibility Crisis
+
+Estimates suggest 50–90% of published research findings cannot be reproduced. Causes include:
+
+- **Unavailable data or code** — the "trust me" approach
+- **P-hacking** — running multiple analyses, reporting only significant ones
+- **HARKing** — Hypothesizing After Results are Known
+- **Statistical errors** — incorrect tests, multiple comparison failures
+- **Fraud** — fabrication, falsification (rare but catastrophic)
+
+### Retraction Watch
+
+Retraction Watch ([retractionwatch.com](https://retractionwatch.com)) maintains a database of retracted papers with reasons. It is a teaching tool: every retraction contains a lesson.
+
+Common reasons in anesthesia literature:
+
+| Reason | Example Pattern |
+|--------|-----------------|
+| Data fabrication | Patient records do not match hospital database |
+| Statistical error | Incorrect analysis chosen; p-values invalid |
+| Unavailable data | Authors decline to share raw data upon request |
+| Ethical violation | Lack of IRB approval for human subjects |
+| Image manipulation | Western blot bands duplicated or altered |
+
+## Exercise
+
+### Part 1: Explore Retraction Watch
+
+1. Go to [retractionwatch.com](https://retractionwatch.com)
+2. Search for "anesthesia" or "anesthesiology"
+3. Select one retracted paper from a mainstream journal (Anesthesia & Analgesia, British Journal of Anaesthesia, Anesthesiology)
+4. Read the retraction notice (usually linked)
+5. Note: year of publication, year of retraction, stated reason
+
+### Part 2: Identify the Failure
+
+For your selected paper, answer:
+
+- What was the core claim? (What did the authors say they found?)
+- What methodological failure led to retraction?
+- Was the error detectable from the published paper alone?
+- Could sharing raw data or code have prevented this?
+
+### Part 3: Reflect
+
+Write 3–5 sentences:
+
+> What warning signs might a critical reader have noticed before the retraction? What does this teach us about our responsibility as consumers of anesthesia research?
+
+Save your response as `week-01-reflection.md` in your course repository.
+
+## Common Pitfalls in Anesthesia Research
+
+| Pitfall | Why It Happens | How to Spot It |
+|---------|----------------|----------------|
+| Underpowered study | Small N, rare outcomes | Confidence intervals include null; post-hoc power calculations |
+| Multiple comparisons unchecked | Many secondary outcomes | No Bonferroni, FDR, or other adjustment; p-values cluster near 0.05 |
+| Selective reporting | Negative primary outcome | Protocol pre-specified outcomes differ from published outcomes |
+| Confounding by indication | Retrospective drug comparison | Groups differ systematically (sicker patients get drug X) |
+| Missing data mishandling | Dropouts, incomplete records | No description of missingness; complete-case analysis only |
+
+## Verification
+
+Before leaving this session, confirm you can:
+
+- [ ] Navigate Retraction Watch and find anesthesia-related retractions
+- [ ] Identify the stated reason for a retraction
+- [ ] Explain the difference between reproducibility and replicability
+- [ ] List three warning signs of potentially irreproducible research
+- [ ] Submit your reflection document
+
+## Resources
+
+- **Retraction Watch Database:** [retractionwatch.com](https://retractionwatch.com)
+- **Paper:** Ioannidis, J.P.A. (2005). "Why Most Published Research Findings Are False." *PLoS Medicine*
+- **Blog:** [Error Statistics Philosophy](https://errorstatistics.com) — Deborah Mayo on statistical criticism
+- **Book:** Rigor Mortis (Richard Harris) — case studies of failed biomedical research
+
+---
+
+[← Back to Basic Tier](../index.qmd)

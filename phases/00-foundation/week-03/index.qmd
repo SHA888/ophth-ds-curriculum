@@ -1,0 +1,300 @@
+---
+title: "Week 3 — Data Structures & Tidy Data"
+---
+
+## Learning Objectives
+
+By the end of this session, you will be able to:
+
+- Create and manipulate vectors, lists, and data frames in R
+- Explain the difference between a data frame and a tibble
+- Define tidy data: one observation per row, one variable per column
+- Identify whether a dataset is tidy or messy
+- Transform a messy clinical dataset into tidy format using code
+- Explain why tidy data makes analysis and visualization easier
+
+## Why Data Structures Matter
+
+Clinical data arrives in tables. An anesthesia record, an ICU flowsheet, a lab report — all are tables. But **not all tables are analyzable.**
+
+A common export from an electronic medical record looks like this:
+
+| patient_id | sbp_08:00 | sbp_09:00 | sbp_10:00 | dbp_08:00 | dbp_09:00 | dbp_10:00 |
+|------------|-----------|-----------|-----------|-----------|-----------|-----------|
+| 101 | 120 | 118 | 115 | 80 | 78 | 75 |
+| 102 | 135 | 132 | — | 85 | 82 | — |
+
+This is **human-readable** but **machine-hostile.** Computing a mean SBP across all patients and all times requires complex gymnastics. The structure encodes time as column names, not as data.
+
+Tidy data solves this. One observation (one BP reading at one time) per row:
+
+| patient_id | time | sbp | dbp |
+|------------|------|-----|-----|
+| 101 | 08:00 | 120 | 80 |
+| 101 | 09:00 | 118 | 78 |
+| 101 | 10:00 | 115 | 75 |
+
+Now `mean(sbp)` works directly. `group_by(time)` works directly. Plotting SBP over time is one line.
+
+**The structure of your data determines the difficulty of your analysis.**
+
+## Core Concepts
+
+### Vectors: One Column
+
+A vector is a single column of values. All values must be the same type.
+
+```r
+# Numeric vector
+weights <- c(70, 85, 60, 90, 75)
+
+# Character vector
+diagnoses <- c("Appendicitis", "Cholecystitis", "Trauma", "Sepsis", "Elective")
+
+# Logical vector (TRUE/FALSE)
+ventilated <- c(TRUE, TRUE, FALSE, TRUE, FALSE)
+```
+
+**Clinical rule:** A vector = one clinical variable measured on multiple patients.
+
+### Data Frames: A Table
+
+A data frame is a collection of vectors, all the same length, forming a table.
+
+```r
+patients <- data.frame(
+  id = c(101, 102, 103, 104, 105),
+  weight_kg = c(70, 85, 60, 90, 75),
+  diagnosis = c("Appendicitis", "Cholecystitis", "Trauma", "Sepsis", "Elective"),
+  ventilated = c(TRUE, TRUE, FALSE, TRUE, FALSE)
+)
+
+patients
+```
+
+Output:
+```
+    id weight_kg     diagnosis ventilated
+1  101        70  Appendicitis       TRUE
+2  102        85  Cholecystitis      TRUE
+3  103        60        Trauma      FALSE
+4  104        90         Sepsis       TRUE
+5  105        75       Elective      FALSE
+```
+
+Access a column with `$`:
+
+```r
+patients$weight_kg      # The weight column
+mean(patients$weight_kg)  # 76
+```
+
+### Tibbles: Enhanced Data Frames
+
+A tibble is a modern data frame from the `tidyverse`. It prints nicely and never converts strings to factors automatically.
+
+```r
+#| eval: false
+library(tidyverse)
+
+patients_tibble <- tibble(
+  id = c(101, 102, 103, 104, 105),
+  weight_kg = c(70, 85, 60, 90, 75),
+  diagnosis = c("Appendicitis", "Cholecystitis", "Trauma", "Sepsis", "Elective")
+)
+
+patients_tibble
+```
+
+For most of this course, `data.frame` and `tibble` behave identically. We will use `tibble` when we start the tidyverse workflow.
+
+### Lists: Nested Containers
+
+A list can hold anything — vectors, data frames, even other lists. Used for complex outputs.
+
+```r
+patient_record <- list(
+  id = 101,
+  demographics = c(age = 45, weight_kg = 70),
+  vitals = data.frame(
+    time = c("08:00", "09:00", "10:00"),
+    sbp = c(120, 118, 115)
+  )
+)
+
+patient_record$vitals
+```
+
+**Clinical analogy:** A list = a patient chart with sections (demographics, vitals, labs, medications).
+
+---
+
+## Tidy Data
+
+### The Three Rules (Hadley Wickham)
+
+1. **Each variable is a column.**
+2. **Each observation is a row.**
+3. **Each value is a cell.**
+
+### Common Violations in Clinical Data
+
+| Violation | Example | Why It Happens |
+|-----------|---------|----------------|
+| Column headers are values | `sbp_08:00`, `sbp_09:00` | Time-stamped vitals exported wide |
+| Multiple variables in one column | `bp = "120/80"` | Combined systolic/diastolic |
+| Multiple observations in one row | One row per patient with all timepoints | EMR default export format |
+| Missing values as blank strings | `""` instead of `NA` | CSV export artifact |
+
+### Example: From Messy to Tidy
+
+**Messy (wide format):**
+
+| patient_id | sbp_t1 | sbp_t2 | sbp_t3 | map_t1 | map_t2 | map_t3 |
+|------------|--------|--------|--------|--------|--------|--------|
+| 101 | 120 | 118 | 115 | 90 | 88 | 85 |
+
+**Tidy (long format):**
+
+| patient_id | timepoint | sbp | map |
+|------------|-----------|-----|-----|
+| 101 | 1 | 120 | 90 |
+| 101 | 2 | 118 | 88 |
+| 101 | 3 | 115 | 85 |
+
+In tidy format:
+- Filtering to timepoint 1 is `patients[patients$timepoint == 1, ]`
+- Plotting SBP vs. MAP is one `plot()` call
+- Computing mean SBP is `mean(patients$sbp)`
+
+In messy format, each of these requires column-name gymnastics.
+
+---
+
+## Exercise
+
+### Part 1: Build a Clinical Data Frame
+
+Create a data frame called `vitals` with 4 patients and 3 variables:
+
+```r
+# Create the data frame
+vitals <- data.frame(
+  patient_id = c(101, 102, 103, 104),
+  heart_rate = c(72, 88, 95, 68),
+  temp_c = c(36.5, 37.8, 38.2, 36.4)
+)
+
+# View it
+vitals
+
+# Compute mean heart rate
+mean(vitals$heart_rate)
+
+# Find the patient with highest temperature
+vitals$patient_id[vitals$temp_c == max(vitals$temp_c)]
+```
+
+Save this code in your Quarto document and render to verify it runs.
+
+### Part 2: Create Messy Data
+
+Create a **messy** version of the same data in wide format:
+
+```r
+vitals_messy <- data.frame(
+  patient_id = c(101, 102, 103, 104),
+  hr_t1 = c(72, 88, 95, 68),
+  hr_t2 = c(70, 85, 92, 67),
+  temp_t1 = c(36.5, 37.8, 38.2, 36.4),
+  temp_t2 = c(36.6, 37.5, 38.0, 36.3)
+)
+
+vitals_messy
+```
+
+**Challenge:** Try to compute the mean of all heart rate measurements (both t1 and t2) without using `c()` to combine columns manually. Notice how difficult it is.
+
+### Part 3: Tidy the Messy Data
+
+Manually create the tidy version:
+
+```r
+vitals_tidy <- data.frame(
+  patient_id = c(101, 101, 102, 102, 103, 103, 104, 104),
+  timepoint = c(1, 2, 1, 2, 1, 2, 1, 2),
+  heart_rate = c(72, 70, 88, 85, 95, 92, 68, 67),
+  temp_c = c(36.5, 36.6, 37.8, 37.5, 38.2, 38.0, 36.4, 36.3)
+)
+
+# Now compute means easily
+mean(vitals_tidy$heart_rate)
+mean(vitals_tidy$heart_rate[vitals_tidy$timepoint == 1])
+mean(vitals_tidy$heart_rate[vitals_tidy$timepoint == 2])
+```
+
+### Part 4: Load and Inspect a Messy CSV
+
+The file `datasets/basic/messy-chart.csv` contains a simulated anesthesia chart export. (If the file does not yet exist, create a small example using the structure below.)
+
+Create a CSV file `~/mds-work/messy-chart.csv` with this content:
+
+```csv
+patient_id,sbp_preop,sbp_postop,dbp_preop,dbp_postop,hr_preop,hr_postop
+101,135,128,85,82,72,68
+102,142,130,88,80,78,70
+103,128,125,82,80,65,62
+```
+
+Load it in R:
+
+```r
+messy <- read.csv("~/mds-work/messy-chart.csv")
+messy
+```
+
+Answer these questions in your Quarto document:
+
+1. Is this dataset tidy? Which rule(s) does it violate?
+2. What would the tidy version look like? (Describe the column names and row structure.)
+3. Why would a tidy version be easier to analyze?
+
+### Part 5: Reflection
+
+Write 2–3 sentences:
+
+> Electronic medical records often export data in wide (messy) format. As a clinician who wants to analyze this data, why is tidy data not just a "preference" but a prerequisite for correct analysis?
+
+---
+
+## Common Pitfalls
+
+| Pitfall | Why It Happens | How to Prevent |
+|---------|----------------|----------------|
+| "My data frame has weird row names" | `data.frame` adds row numbers automatically | Use `row.names = NULL` or `tibble` |
+| "Numbers became text" | Mixing types in a vector coerces everything to character | Keep vectors homogeneous; use `as.numeric()` if needed |
+| "Missing values break my mean" | `mean(c(1, 2, NA))` returns `NA` | Use `mean(x, na.rm = TRUE)` |
+| "Column names have spaces" | Imported from Excel or EMR | Rename with `names(df) <- c("new", "names")` |
+| "Wide data feels more compact" | True — but compact for humans, hostile for analysis | Reshape before analyzing; keep wide for display only |
+
+## Verification
+
+Before leaving this session, confirm you can:
+
+- [ ] Create a `data.frame` with multiple columns and rows
+- [ ] Access a column using `$`
+- [ ] Compute summary statistics on a column
+- [ ] Explain the three rules of tidy data in your own words
+- [ ] Identify which rule(s) a messy dataset violates
+- [ ] Describe (or create) the tidy version of a given messy dataset
+- [ ] Push your Quarto document to GitHub
+
+## Resources
+
+- **R for Data Science (2e):** [r4ds.hadley.nz/data-tidy.html](https://r4ds.hadley.nz/data-tidy.html) — Tidy data chapter
+- **Tidy Data Paper:** Wickham, H. (2014). "Tidy Data." *Journal of Statistical Software*
+- **Quarto Guide:** [quarto.org/docs/computations/r.html](https://quarto.org/docs/computations/r.html) — Embedding R code in documents
+
+---
+
+[← Back to Basic Tier](../index.qmd)

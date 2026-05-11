@@ -1,0 +1,210 @@
+---
+title: "Week 2 — Literate Programming for Reproducible Research"
+---
+
+## Learning Objectives
+
+By the end of this session, you will be able to:
+
+- Explain why literate programming prevents the failures you analyzed in Week 1
+- Create a reproducible Quarto document with code, prose, and metadata
+- Use chunk options to control what is shown vs. what is executed
+- Render a document to HTML and verify it reproduces without error
+- Push a complete analysis to GitHub as a version-controlled artifact
+
+## Why Literate Programming?
+
+In Week 1, you analyzed retracted papers. One recurring failure mode was: **the analysis could not be reproduced because the method was described in prose, not in code.** Readers had to trust the authors' verbal description of their statistical procedure.
+
+Literate programming (Quarto, R Markdown, Jupyter) inverts this. The code *is* the method description. The prose explains *why*. Together they create a single artifact that:
+
+- Can be re-run by anyone with the data
+- Documents decisions where they were made (in the same file)
+- Is version-controlled, so every change is tracked
+
+This is not a convenience. It is a **disciplinary practice** that protects against the exact failures you found in Retraction Watch.
+
+## Core Concepts
+
+### The Reproducibility Stack
+
+```
+┌─────────────────────────┐
+│  Quarto document (.qmd) │  ← Code + prose + metadata
+├─────────────────────────┤
+│  Version control (Git)  │  ← Every change tracked
+├─────────────────────────┤
+│  Remote repository        │  ← GitHub: backup + share
+├─────────────────────────┤
+│  Environment (renv)     │  ← Package versions locked
+└─────────────────────────┘
+```
+
+Week 2 covers the top two layers. Environment management (renv) comes later.
+
+### Chunk Options for Reproducibility
+
+| Option | Purpose | Reproducibility Role |
+|--------|---------|----------------------|
+| `echo: true` | Show code | Others can see exactly what was done |
+| `echo: false` | Hide code | Clean output, but code is still in source |
+| `eval: true` | Run code | Default; ensures output is current |
+| `eval: false` | Skip execution | For slow or one-time operations |
+| `message: false` | Hide package messages | Cleaner output without losing code |
+| `warning: false` | Hide warnings | Use carefully — warnings often matter |
+
+**Rule:** `echo: true` for all analysis code unless you have a specific reason. Transparency is the default.
+
+### YAML Metadata as Documentation
+
+The YAML header is not decoration. It is the **minimum viable documentation** for reproducibility:
+
+```yaml
+---
+title: "Propofol Dose Analysis"
+author: "Your Name"
+date: "2026-04-22"
+format: html
+---
+```
+
+Add these fields for research documents:
+
+```yaml
+---
+title: "Propofol Dose Analysis"
+subtitle: "Basic Tier — Week 2 Exercise"
+author: "Your Name"
+date: "2026-04-22"
+format:
+  html:
+    code-fold: false    # Never hide code by default
+    toc: true         # Table of contents for navigation
+execute:
+  echo: true          # Global echo setting
+---
+```
+
+## Exercise
+
+### Part 1: Create a Reproducible Document
+
+1. Open RStudio
+2. File → New File → Quarto Document
+3. Save as: `~/mds-work/basic-week2-reproducibility.qmd`
+4. Replace the template with the following structure (copy exactly):
+
+```markdown
+---
+title: "Reproducibility Exercise — Basic Week 2"
+author: "Your Name"
+date: "2026-04-22"
+format:
+  html:
+    code-fold: false
+    toc: true
+execute:
+  echo: true
+---
+
+## Purpose
+
+This document demonstrates a reproducible analysis workflow. Every step is documented in code and prose.
+
+## Data
+
+Load the built-in `mtcars` dataset (used here as a stand-in for clinical data):
+
+```r
+#| message: false
+data(mtcars)
+head(mtcars)
+```
+
+## Analysis
+
+Calculate mean miles per gallon (analogous to calculating mean drug dose):
+
+```r
+mean_mpg <- mean(mtcars$mpg)
+mean_mpg
+```
+
+## Results
+
+The mean MPG is `r round(mean_mpg, 1)`.
+
+## Conclusion
+
+This analysis is fully reproducible: the code is visible, the data source is named, and the output is generated from the code.
+```
+
+### Part 2: Render and Verify
+
+1. Click **Render** (or Ctrl+Shift+K / Cmd+Shift+K)
+2. Open the generated HTML file in a browser
+3. Verify:
+   - [ ] Code is visible for every analysis step
+   - [ ] Output appears below each code chunk
+   - [ ] No "magic numbers" — every statistic is generated from code
+   - [ ] The document renders without errors
+
+### Part 3: Version Control
+
+1. Ensure your `mds-work` folder is a Git repository (initialized in Intro Week 2):
+   ```bash
+   cd ~/mds-work
+   git status
+   ```
+
+2. Stage, commit, and push:
+   ```bash
+   git add basic-week2-reproducibility.qmd
+   git commit -m "Add Week 2 reproducibility exercise"
+   git push origin main
+   ```
+
+3. Verify on GitHub that the `.qmd` file is visible.
+
+### Part 4: Reflection
+
+In your document, add a final section:
+
+```markdown
+## Reflection
+
+How does this workflow prevent the failures you found in Retraction Watch? Write 2–3 sentences.
+```
+
+Re-render and push the updated document.
+
+## Common Pitfalls
+
+| Pitfall | Why It Happens | How to Prevent |
+|---------|----------------|----------------|
+| "It works on my machine" | Undocumented package versions | Use `renv` (covered later); for now, note package versions in prose |
+| "I changed the data but forgot to update the text" | Manual text updates | Use inline R expressions: `` `r mean(mtcars$mpg)` `` |
+| "The code is in the document but I can't find it" | `echo: false` everywhere | Default to `echo: true`; hide code only for final reports |
+| "I rendered once and never again" | Stale output | Re-render before every commit; check that HTML updates |
+| "I pushed the HTML but not the QMD" | Only committing output | Always commit `.qmd` (source); HTML is generated, optional to commit |
+
+## Verification
+
+Before leaving this session, confirm you can:
+
+- [ ] Explain how literate programming prevents irreproducible analysis
+- [ ] Create a Quarto document with YAML, prose, code chunks, and inline expressions
+- [ ] Use `echo: true` as the default chunk option
+- [ ] Render to HTML and verify the output
+- [ ] Commit and push both `.qmd` and `.html` to GitHub
+- [ ] Identify one Retraction Watch failure mode that this workflow would have prevented
+
+## Resources
+
+- **Quarto Guide:** [quarto.org/docs/guide](https://quarto.org/docs/guide/)
+- **R for Data Science (2e):** [r4ds.hadley.nz](https://r4ds.hadley.nz/) — Quarto chapter
+- **Ten Simple Rules for Reproducible Computational Research:** [PLOS Computational Biology](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1003285)
+
+---
+
+[← Back to Basic Tier](../index.qmd)

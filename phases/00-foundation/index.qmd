@@ -1,0 +1,29 @@
+---
+title: "Intermediate Tier"
+subtitle: "20 weeks · Python · Independent Analyst"
+---
+
+## Overview
+
+The Intermediate tier transitions residents from reproduction to independent analysis. Introduction to **prediction vs inference** as the central methodological distinction.
+
+## Why Python?
+
+The builder track opens at Intermediate. EHR wrangling, feature engineering, and prediction pipelines are better served by Python's ecosystem. `scikit-learn`, `lifelines`, `polars`, `shap` — no equivalent coherence in R for this workflow.
+
+## Datasets
+
+- VitalDB: Open access hemodynamic monitoring dataset
+- eICU-CRD: PhysioNet credentialed critical care database
+
+## Capstone
+
+Quarto manuscript + reproducible Python pipeline using VitalDB or eICU.
+
+## Modules
+
+*Coming soon. Module structure: Week 1–20 with `index.qmd` (resident-facing) and `facilitator.qmd` (facilitator notes).*
+
+---
+
+[← Back to Home](../index.qmd)

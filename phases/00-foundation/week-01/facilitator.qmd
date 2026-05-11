@@ -1,0 +1,143 @@
+---
+title: "Week 1 — Facilitator Notes"
+subtitle: "Environment & Philosophy"
+---
+
+## Learning Objectives
+
+Residents should leave able to explain why reproducibility matters, navigate Retraction Watch, and identify methodological failures that lead to retraction. This session establishes the ethical and philosophical foundation for all subsequent technical work.
+
+---
+
+## Session Format
+
+| Segment | Duration | Activity |
+|---------|----------|----------|
+| Lecture | 20 min | Reproducibility crisis in anesthesia context |
+| Demo | 15 min | Navigating Retraction Watch; anatomy of a retraction |
+| Guided Practice | 30 min | Residents select and analyze a retracted paper |
+| Discussion | 25 min | Group share: findings and reflections |
+| Check-in | 10 min | Preview Week 2; verify repository setup |
+
+---
+
+## Key Teaching Points
+
+### Reframe "Reproducibility"
+
+Residents often think reproducibility is "someone else's problem" — the statistician's, the data analyst's. Reframe: **you are the final peer reviewer.** When you apply a paper's conclusions to your patient, you are trusting their methods. You must be able to verify that trust.
+
+### The Anesthesia Context
+
+Use examples from our specialty:
+
+- TIVA vs. inhalational (controversial, many underpowered studies)
+- PONV prophylaxis (many small trials, conflicting results)
+- Fluid management (ABW vs. IBW — replicability challenges)
+
+Anesthesia has a "small sample, rare outcome" problem. This makes us vulnerable to irreproducible findings.
+
+### Retraction Watch as a Tool
+
+Not all retractions are fraud. Many are honest errors detected post-publication. Teach residents to distinguish:
+
+| Type | Teaching Value |
+|------|----------------|
+| Fraud (fabrication) | Shows importance of data provenance |
+| Statistical error | Shows importance of code verification |
+| Unavailable data | Shows importance of open science |
+| Ethical violation | Shows importance of process integrity |
+
+### Common Confusion Points
+
+| Confusion | Clarification |
+|-----------|---------------|
+| "Reproducibility = I can run the code again" | No — that's repeatability. Reproducibility requires a different person, same data. |
+| "If it's published in a big journal, it's reproducible" | No — impact factor does not predict reproducibility. |
+| "Retractions are rare and obvious" | No — many papers are simply never reproduced; retraction is the tip of the iceberg. |
+
+---
+
+## Live Demo Script
+
+**Navigate to Retraction Watch:**
+```
+1. Open browser: retractionwatch.com
+2. Click "Database" or use search
+3. Search term: "anesthesia"
+4. Filter by journal: select "Anesthesiology"
+5. Select a recent entry
+6. Show: Title, Journal, Year, Reason, Original Paper link
+```
+
+**Anatomy of a Retraction Notice:**
+- Usually found at DOI with "_retraction" suffix or editor's note
+- Often vague: "concerns about data integrity"
+- Sometimes specific: "statistical error invalidated primary conclusion"
+- Note: Authors may disagree with retraction (watch for statements)
+
+**Select a "Teaching Case":**
+Choose a retraction with clear, instructive failure:
+- Statistical error (wrong test applied)
+- Image duplication (Western blot issues)
+- Data unavailability (authors declined sharing)
+
+Avoid pure fraud cases for this session — they discourage rather than teach.
+
+---
+
+## Exercise Guidance
+
+**Part 1:** Residents will need 10–15 minutes to explore and select a paper. Circulate and help those who get stuck. Suggest specific search terms if needed ("propofol," "sevoflurane," "postoperative nausea").
+
+**Part 2:** Encourage residents to dig into the original paper, not just the retraction notice. The gap between claim and failure is instructive.
+
+**Part 3:** Reflections should be brief but specific. Look for:
+- Recognition of warning signs (underpowered, no protocol, selective reporting)
+- Personal stake ("this could have affected my practice")
+- Commitment to verification ("I will check for data availability from now on")
+
+---
+
+## Troubleshooting During Session
+
+| Problem | Quick Fix |
+|---------|-----------|
+| Retraction Watch won't load | Use database filter page directly; have backup paper selected |
+| Cannot access full text | Check if library has access; use abstract if necessary |
+| Resident finds no anesthesia papers | Expand search to "surgery" or "perioperative" |
+| Resident selects complex fraud case | Acknowledge, then guide to simpler statistical error case |
+| Reflection is superficial | Prompt: "If you had reviewed this pre-publication, what would you have asked?" |
+
+---
+
+## Assessment
+
+Verify each resident can:
+
+- [ ] Navigate to Retraction Watch independently
+- [ ] Identify stated reason for retraction in selected paper
+- [ ] Explain reproducibility vs replicability in their own words
+- [ ] List three warning signs of irreproducible research
+- [ ] Submit reflection document to repository
+
+If not, schedule 1-on-1 before Week 2.
+
+---
+
+## Preparation Checklist
+
+- [ ] Tested Retraction Watch access on classroom WiFi
+- [ ] Selected 3–5 "teaching case" retractions as backups
+- [ ] Verified all residents have GitHub repositories created
+- [ ] Prepared discussion prompts for group share
+- [ ] Identified residents likely to struggle with reflection writing
+
+---
+
+## Connection to Week 2
+
+Preview: Week 2 transitions to technical skills — R, Quarto, GitHub. The philosophical foundation from Week 1 motivates the technical work: we learn these tools not for their own sake, but to make our own work reproducible and to verify the work of others.
+
+End session with: "Next week, you start building the skills to prevent what we analyzed today."
+

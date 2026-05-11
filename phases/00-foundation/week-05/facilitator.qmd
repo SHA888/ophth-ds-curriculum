@@ -1,0 +1,196 @@
+---
+title: "Week 5 — Facilitator Notes"
+subtitle: "Exploratory Data Analysis I: Distributions, Shape, Spread, Outliers"
+---
+
+## Learning Objectives
+
+Residents should move from "I can store data" (Week 3) and "I can classify it" (Week 4) to "I can describe it." They must understand that summary statistics are not mechanical — the choice of mean vs. median depends on distribution shape, and the presence of outliers requires clinical judgment, not just statistical rules.
+
+---
+
+## Session Format
+
+| Segment | Duration | Activity |
+|---------|----------|----------|
+| Recap | 5 min | Review Week 4 data types; how do they affect what we can compute? |
+| Lecture | 20 min | Center, spread, shape; skewness; outlier identification |
+| Live Demo | 15 min | Build simulated dataset together; compute summaries; identify outlier |
+| Independent Exercise | 30 min | Parts 1–4: create data, summarize, flag outlier, investigate |
+| Group Discussion | 15 min | Part 5: compare summary tables; debate mean vs. median choices |
+| Reflection | 5 min | Part 6: write and submit |
+| Check-in | 5 min | Preview Week 6 (ggplot2 visual thinking); verify GitHub push |
+
+---
+
+## Key Teaching Points
+
+### Mean vs. Median Is Not Aesthetic Preference
+
+Residents often think "median is just an alternative" or "my supervisor prefers mean." Push back:
+
+> "Mean ± SD for right-skewed data is not a style choice. It is a wrong answer. A reader who sees 'mean ICU LOS = 7.2 ± 12.4 days' immediately knows: (a) the data is skewed, (b) the authors did not check, (c) the mean is pulled up by a few long stays, and (d) I cannot trust anything else in this paper without checking."
+
+The clinical examples that drive this home:
+- **ICU length of stay:** Most patients stay 2–3 days; a few stay 45. Mean = 7 days; median = 3 days. Which number describes your typical patient?
+- **Propofol dose in mixed-weight cohort:** 70 kg patient gets 140 mg; 120 kg patient gets 240 mg. Mean dose is 170 mg. But no "typical" patient gets 170 mg.
+
+### The Data Entry Error vs. Clinical Extreme
+
+The exercise includes a deliberate data entry error: patient 110, weight recorded as 154 (pounds, not kg). The propofol dose was calculated correctly for 70 kg, but the recorded weight is wrong.
+
+**Key insight:** Outlier detection alone does not tell you what to do. Statistics flag the anomaly; clinical reasoning decides the action.
+
+Walk through the decision tree:
+1. **Flagged by 1.5 × IQR rule:** Patient 110, weight = 154 kg
+2. **Physiologically implausible:** 154 kg is possible but unusual (BMI ~50 for average height)
+3. **Cross-check with another variable:** Propofol dose / weight = 0.9 mg/kg (way below standard 2 mg/kg). If weight were 70 kg, dose would be exactly 2 mg/kg.
+4. **Conclusion:** Data entry error (pounds recorded as kg). Correct to 70 kg.
+
+**Contrast case:** Patient with weight = 12 kg in adult ICU data.
+- Also flagged as outlier
+- But 12 kg is a neonate — possible if pediatric case mixed in
+- Action: Document, investigate (wrong dataset? pediatric wing?), do not silently correct
+
+### set.seed() Is Reproducibility, Not Magic
+
+Many residents skip `set.seed()` because "random is random." Explain:
+
+> "Without `set.seed()`, every time you render your document, the random numbers change. Your tables change. Your outlier moves from patient 110 to patient 115. Your Git diff shows changes that are not real — just randomness. `set.seed(42)` (or any number) locks the random sequence. Same seed, same numbers, every time."
+
+This connects directly to Week 2's reproducibility message.
+
+### Distribution Shape Determines Everything
+
+| Shape | Visual | Typical Clinical Variable | Correct Summary |
+|-------|--------|---------------------------|----------------|
+| Symmetric | Bell curve | Height in homogeneous cohort | Mean ± SD |
+| Right-skewed | Tail to right | ICU LOS, cost, wait times | Median [IQR] |
+| Left-skewed | Tail to left | Pain scores (floor near 0) | Median [IQR] |
+| Bimodal | Two peaks | Age in mixed pediatric/adult | Report two subgroups separately |
+
+**Week 6 preview:** "Next week you will draw these distributions instead of just computing numbers. A histogram tells you the shape in one glance."
+
+### Significant Figures for Small n
+
+A common resident error: reporting mean age = 54.3728 ± 14.2917 years for n = 20.
+
+**Rule of thumb:** One decimal place more than the measurement precision. If ages are recorded as integers, report mean as 54.4 ± 14.3. Not 54.37. Not 54.
+
+This is not pedantry — it signals competence to reviewers.
+
+---
+
+## Live Demo Script
+
+**Build the dataset together, step by step:**
+
+1. `set.seed(42)` — explain why
+2. Create `age` with `rnorm()` — explain it generates from a normal distribution
+3. `pmax(age, 18)` and `pmin(age, 90)` — truncate to realistic clinical range
+4. Create `weight_kg` and `propofol_mg` similarly
+5. **Pause:** Ask: "What does `rlnorm()` do for case duration?" (Generates right-skewed data — most cases short, some very long)
+6. Insert the data entry error: `weight_kg[10] <- 154`
+7. Combine into `data.frame`
+8. Summarize with `summary()` — one function, all variables
+
+**Key pause:** After `summary()`, ask: "What looks wrong?" (weight max = 154)
+
+**Investigate the outlier:**
+
+```r
+# Compute mg/kg
+patients$mg_per_kg <- patients$propofol_mg / patients$weight_kg
+summary(patients$mg_per_kg)
+
+# Which is wrong?
+patients[which.max(patients$mg_per_kg), c("patient_id", "weight_kg", "propofol_mg", "mg_per_kg")]
+```
+
+**Resolution:** Correct the weight, recompute, compare summaries.
+
+```r
+patients$weight_kg[patients$patient_id == 110] <- 70
+patients$mg_per_kg <- patients$propofol_mg / patients$weight_kg
+summary(patients$mg_per_kg)
+```
+
+---
+
+## Exercise Guidance
+
+**Part 1:** Straightforward data generation. Watch for:
+- Forgetting `set.seed()` — remind them to re-render and check consistency
+- Copy-paste errors in the code (especially the `pmax`/`pmin` lines)
+
+**Part 2:** Summary computation. Common issues:
+- Trying to compute `sd()` on `asa` (ordered factor) — good teaching moment
+- Not understanding `rlnorm()` produces right-skewed data — explain briefly
+
+**Part 3:** Outlier identification. The key skill is the investigation chain:
+1. Flag by IQR rule
+2. Cross-check with clinical knowledge (is 154 kg plausible?)
+3. Cross-check with related variable (mg/kg ratio)
+4. Make a justified correction
+
+Some residents will want to delete the row. Push back: "We know the correct weight from the propofol dose. Why throw away a complete patient record when we can fix one value?"
+
+**Part 4:** Dose-weight relationship. This reinforces Part 3. The extreme mg/kg ratio confirms the diagnosis.
+
+**Part 5:** Summary table construction. Look for:
+- Correct choice of mean±SD vs. median [IQR] based on skew
+- Appropriate rounding (not 4 decimal places for n=20)
+- Clear documentation of the outlier correction
+
+**Part 6:** Reflection quality. Good answers connect to:
+- ICU LOS as a canonical right-skewed variable
+- The "mean ± SD" template as a lazy default in clinical papers
+- The reader's lost trust when they see obviously skewed data summarized as mean
+
+---
+
+## Troubleshooting During Session
+
+| Problem | Quick Fix |
+|---------|-----------|
+| `rnorm()` gives different numbers every time | Forgot `set.seed()` — add at top, re-render, check consistency |
+| `summary()` shows weight max = 154 but resident doesn't notice | Ask: "What is the typical weight range in your clinical experience?" |
+| "I don't know if my data is skewed" | Compare `mean()` and `median()`; if they differ by >10%, likely skewed |
+| "Should I remove or correct the outlier?" | Use the clinical reasoning chain: plausible? cross-check? fixable? |
+| `rlnorm()` produces NaN or Inf | Check parameters — `meanlog` and `sdlog` are parameters of the log-normal, not the mean and SD of the output |
+| Significant figures confusion | Rule: one decimal more than raw data precision. Ages as integers → one decimal place |
+
+---
+
+## Assessment
+
+Verify each resident can:
+
+- [ ] Use `set.seed()` and explain why it matters for reproducibility
+- [ ] Compute and interpret mean, median, SD, IQR, and range
+- [ ] Identify right-skewed vs. symmetric data using mean vs. median
+- [ ] Flag outliers using the 1.5 × IQR rule
+- [ ] Investigate outliers using clinical reasoning and cross-variable checks
+- [ ] Choose mean±SD or median [IQR] appropriately and justify the choice
+- [ ] Document data corrections transparently (not silently)
+
+If not, schedule 1-on-1. Week 6 (visualization) and Week 7 (Table 1) assume these skills.
+
+---
+
+## Preparation Checklist
+
+- [ ] Tested `rnorm()` and `rlnorm()` code on classroom R version
+- [ ] Prepared printed SOFA scoring table for potential reference
+- [ ] Prepared outlier investigation flowchart for wall display
+- [ ] Identified residents who struggled with base R in Week 3–4
+- [ ] Verified classroom machines can render Quarto documents with random number generation
+
+---
+
+## Connection to Week 6
+
+Preview: "This week you described distributions with numbers. Next week you draw them. A histogram of ICU LOS will show the right skew immediately — no math needed. You'll also learn `ggplot2`, the visualization grammar that produces every figure in clinical research. The summaries from this week become the axis labels and annotations of next week's plots."
+
+End session with: "Numbers describe. Pictures convince. Next week: pictures."
+

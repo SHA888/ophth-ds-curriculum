@@ -1,0 +1,212 @@
+---
+title: "Week 4 — Facilitator Notes"
+subtitle: "Clinical Data Types"
+---
+
+## Learning Objectives
+
+Residents should understand that data structure (Week 3) and data type classification are distinct and equally critical. A perfectly tidy dataset analyzed with the wrong methods (t-test on ordinal data, mean of categorical data) produces invalid conclusions. This week builds the mental model for choosing appropriate statistical methods.
+
+---
+
+## Session Format
+
+| Segment | Duration | Activity |
+|---------|----------|----------|
+| Recap | 5 min | Review Week 3 tidy data exercise; preview classification |
+| Lecture | 25 min | Four data types with clinical examples; factor mechanics |
+| Live Demo | 15 min | Create factors; show mean-of-ordinal trap; demonstrate survival data structure |
+| Independent Exercise | 30 min | Parts 1–3: classification table, factor creation, SOFA analysis |
+| Group Discussion | 15 min | Part 4: published paper errors; share which was most surprising |
+| Reflection | 5 min | Part 5: write and submit |
+| Check-in | 5 min | Preview Week 5 (EDA I — distributions); verify GitHub push |
+
+---
+
+## Key Teaching Points
+
+### The Structure vs. Type Distinction
+
+**Week 3:** How data is stored (rows, columns, tidy vs. messy)
+**Week 4:** What the values mean (continuous, ordinal, nominal, time-to-event)
+
+Both are prerequisites for correct analysis. Tidy data with wrong type analysis = wrong answer. Correct type analysis on messy data = also wrong answer.
+
+Emphasize: "You need both. This week gives you the second half."
+
+### The Mean-of-ASA Trap
+
+This is the classic teaching moment. Show it live:
+
+```r
+asa <- ordered(c("II", "III", "II", "IV", "III", "II"), 
+               levels = c("I", "II", "III", "IV", "V", "VI"))
+
+mean(asa)  # Returns 2.333 — what does this mean?
+```
+
+Ask: "Is the average patient between ASA II and III? What does 0.333 of an ASA class look like clinically?"
+
+The answer: it's meaningless. ASA III is not "50% sicker" than ASA II. The categories describe severity classes, not a continuous scale.
+
+**Correct approach:**
+```r
+median(asa)  # "III" — the middle category
+table(asa)   # Frequency distribution
+prop.table(table(asa))  # Proportions
+```
+
+### The Censoring Trap
+
+This is often the hardest concept. Use a concrete ICU example:
+
+> "It's Day 5 of your study. Patient A died on Day 3 (event). Patient B was discharged on Day 4 (event). Patient C is still in the ICU (censored). Patient D is still in the ICU (censored).
+>
+> If you only count patients with complete outcomes, you have 2 patients. Both had events (died or discharged). Your mean ICU stay is (3+4)/2 = 3.5 days.
+>
+> But Patients C and D have already been in the ICU 5 days! The true mean is definitely higher than 3.5 days. Excluding them underestimates severity."
+
+This is why we need survival analysis — it uses all the information we have, including the partial information from censored patients.
+
+### SOFA as the Capstone Example
+
+SOFA is perfect because:
+1. **Mixed types:** Respiratory (ratio/continuous), Coagulation (count/continuous), Neurological (ordinal GCS)
+2. **Lossy conversion:** Converting PaO2/FiO2 = 350 mmHg to SOFA = 1 discards the exact ratio. 399 and 301 both become SOFA 1, but clinically different.
+3. **Ordinal output:** SOFA 0-4 is ordinal. SOFA 4 is worse than SOFA 2, but not "twice as bad."
+
+Push residents to articulate why the conversion loses information. The key insight: **any binning of continuous data loses information.** Use it only when necessary (SOFA is standard, so we accept the loss).
+
+### The Four Error Types (Part 4)
+
+Use these as a teaching quiz. Have residents identify the error before revealing the answer.
+
+**Error A — Mean ASA:**
+- Wrong: ASA is ordinal, not interval. Mean is meaningless.
+- Right: Report median ASA or distribution (30% ASA II, 50% ASA III, etc.)
+
+**Error B — t-test on time-to-event:**
+- Wrong: Ignores censoring. Excludes patients still in ICU.
+- Right: Kaplan-Meier curves, log-rank test, or Cox regression.
+
+**Error C — Sex as continuous:**
+- Wrong: 1 and 2 are codes, not numbers. Regression treats difference between 1 and 2 as meaningful.
+- Right: Sex as factor. If binary, reference category (e.g., male = 0, female = 1) with explicit interpretation.
+
+**Error D — 50% reduction in pain:**
+- Wrong: Pain is ordinal. Percentage change assumes interval scale.
+- Right: Report median change or proportion achieving clinically meaningful reduction (e.g., ≥2 point drop).
+
+---
+
+## Live Demo Script
+
+**Create a patient dataset with mixed types:**
+
+```r
+# Build it together
+patients <- data.frame(
+  id = c(101, 102, 103, 104, 105),
+  map = c(72, 68, 75, 82, 70),                    # Continuous
+  asa = ordered(c("II", "III", "II", "IV", "III"), # Ordinal
+                levels = c("I", "II", "III", "IV", "V")),
+  sex = factor(c("male", "female", "female", "male", "male")),  # Nominal
+  icu_days = c(3, 8, 5, 12, 4),                    # Continuous but...
+  died = c(0, 0, 0, 1, 0)                          # ...will be censored data next week
+)
+```
+
+**Show the wrong way first:**
+
+```r
+# Wrong: Mean of ordinal
+mean(patients$asa)  # Nonsense result
+
+# Wrong: Mode of continuous
+mode <- function(x) names(sort(-table(x)))[1]
+mode(patients$map)  # Pointless for continuous
+```
+
+**Show the right way:**
+
+```r
+# Continuous: Summary statistics
+summary(patients$map)
+
+# Ordinal: Table and mode (base R median() does not support factors)
+table(patients$asa)
+names(which.max(table(patients$asa)))  # Most frequent ASA class
+
+# Nominal: Table only
+table(patients$sex)
+prop.table(table(patients$sex))
+```
+
+**Key pause:** After each "wrong" example, ask: "What information does this destroy?"
+
+---
+
+## Exercise Guidance
+
+**Part 1:** Check each resident's table. Common mistakes:
+- Calling pain score "continuous" (it's ordinal)
+- Calling GCS "continuous" (it's ordinal, even though numeric)
+- Missing that ICU LOS with censoring is time-to-event
+
+**Part 2:** Straightforward factor creation. Watch for:
+- Forgetting `ordered()` for ordinal variables
+- Typos in level specifications (case sensitivity matters)
+
+**Part 3:** SOFA is the hardest. Circulate and probe:
+- "Why is PaO2/FiO2 continuous but SOFA score ordinal?"
+- "What's lost when we convert 350 mmHg to SOFA 1?"
+- "Can you add SOFA scores? Is SOFA total 8 meaningfully twice as bad as SOFA 4?"
+
+**Part 4:** Group discussion. The published errors often surprise residents. Ask: "Have you seen this in papers you've read?"
+
+**Part 5:** Reflection should connect to clinical practice — composite scores are everywhere (SOFA, APACHE, GCS), and misuse is common.
+
+---
+
+## Troubleshooting During Session
+
+| Problem | Quick Fix |
+|---------|-----------|
+| `mean(asa)` returns NA | ASA is ordered factor; use `median()` or convert carefully |
+| Factor levels in wrong order | Specify `levels = c(...)` explicitly |
+| `str()` shows "chr" instead of "Factor" | Forgot `factor()` wrapper; convert with `factor()` |
+| "I don't understand censoring" | Use the Day 5 ICU concrete example; draw timeline |
+| Can't decide if variable is ordinal or continuous | Ask: "Is the difference between 1 and 2 the same as between 3 and 4?" |
+| SOFA conversion confusion | Focus on "what information is lost" — the 350 vs 301 example |
+
+---
+
+## Assessment
+
+Verify each resident can:
+
+- [ ] Distinguish the four data types with clinical examples
+- [ ] Explain why mean is inappropriate for ordinal data
+- [ ] Explain why excluding censored patients biases time-to-event analysis
+- [ ] Create factors and ordered factors correctly
+- [ ] Classify SOFA components and explain the lossy conversion
+- [ ] Identify data type errors in published research
+
+If not, schedule 1-on-1. Week 5 (distributions) and Week 8 (inference) depend heavily on this foundation.
+
+---
+
+## Preparation Checklist
+
+- [ ] Prepared mixed-type patient dataset for live demo
+- [ ] Printed SOFA scoring table for reference
+- [ ] Selected 1–2 recent anesthesia papers with potential data type errors for discussion
+- [ ] Tested `survival` package installation (for Week 13 preview mention)
+- [ ] Verified residents completed Week 3 tidy data exercise
+
+---
+
+## Connection to Week 5
+
+Preview: "Next week we start Exploratory Data Analysis. Now that you know how to structure data (tidy) and classify it (types), you'll learn to describe it — distributions, shape, center, spread. The histogram you draw for continuous MAP will look completely different from the bar chart for ordinal ASA. You'll know why."
+
