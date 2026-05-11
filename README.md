@@ -1,11 +1,11 @@
 <!-- SPDX-License-Identifier: CC-BY-4.0 -->
 
-# Ophthalomology Data Science Curriculum
+# Ophthalmology Data Science Curriculum
 
 > A self-learner curriculum for computer science, informatics, and data science applied to **ophthalmology**.
 > Designed for clinically-trained ophthalmologists with no formal CS/informatics background.
 
-**Status:** `v0.0.1` — scaffolding. No content yet. LICENSE pending discussion (see [§ Licensing](#licensing)).
+**Status:** `v0.0.2` — governance and licensing completed. Dual license (CC BY 4.0 for prose, MIT for code).
 
 ---
 
