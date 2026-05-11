@@ -35,11 +35,11 @@
     - [x] T0.4.4 — `gitleaks` secret scan on PR
     - [ ] T0.4.5 — Branch protection: require all checks green + 1 review
     - [x] T0.4.6 — Dependabot for GitHub Actions versions
-- [ ] **T0.5 — Quarto project skeleton**
-  - [ ] T0.5.1 — `_quarto.yml` with HTML + PDF formats
-  - [ ] T0.5.2 — Citation handling: CSL file (Vancouver) + empty `references.bib`
-  - [ ] T0.5.3 — Sidebar navigation stubs for all 6 phases
-  - [ ] T0.5.4 — Landing page (`index.qmd`) mirroring `README.md`
+- [x] **T0.5 — Quarto project skeleton**
+  - [x] T0.5.1 — `_quarto.yml` with HTML + PDF formats
+  - [x] T0.5.2 — Citation handling: CSL file (Vancouver) + empty `references.bib`
+  - [x] T0.5.3 — Sidebar navigation stubs for all 6 phases
+  - [x] T0.5.4 — Landing page (`index.qmd`) mirroring `README.md`
 - [ ] **T0.6 — Release `v0.1.0`**
   - [ ] T0.6.1 — Update `CHANGELOG.md`
   - [ ] T0.6.2 — Tag `v0.1.0`, draft GitHub Release notes

@@ -1,0 +1,15 @@
+project:
+  type: website
+  output-dir: _site
+  render:
+    - "**/*.qmd"
+
+format:
+  html:
+    theme: flatly
+    toc: true
+    code-fold: true
+  pdf:
+    documentclass: article
+    toc: true
+    latex-engine: xelatex

@@ -1,0 +1,12 @@
+- text: Phase 0 – Foundation
+  href: phases/00-foundation/README.qmd
+- text: Phase 1 – Imaging Foundations
+  href: phases/01-imaging-foundations/README.qmd
+- text: Phase 2 – Classical CV
+  href: phases/02-classical-cv/README.qmd
+- text: Phase 3 – Deep Learning
+  href: phases/03-deep-learning/README.qmd
+- text: Phase 4 – Domain Projects
+  href: phases/04-domain-projects/README.qmd
+- text: Phase 5 – Clinical Translation
+  href: phases/05-clinical-translation/README.qmd
