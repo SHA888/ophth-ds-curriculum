@@ -29,12 +29,12 @@
   - [x] T0.3.4 — GitHub issue templates (bug, content, reading-list)
   - [x] T0.3.5 — Pull-request template with binary checklist
 - [ ] **T0.4 — CI / DevSecOps gates**
-  - [ ] T0.4.1 — `markdownlint-cli2` workflow on PR
-  - [ ] T0.4.2 — `lychee` link-check workflow (weekly + on PR)
-  - [ ] T0.4.3 — Quarto render workflow → GitHub Pages preview
-  - [ ] T0.4.4 — `gitleaks` secret scan on PR
-  - [ ] T0.4.5 — Branch protection: require all checks green + 1 review
-  - [ ] T0.4.6 — Dependabot for GitHub Actions versions
+  - [x] T0.4.1 — `markdownlint-cli2` workflow on PR
+    - [x] T0.4.2 — `lychee` link-check workflow (weekly + on PR)
+  - [x] T0.4.3 — Quarto render workflow → GitHub Pages preview
+    - [x] T0.4.4 — `gitleaks` secret scan on PR
+    - [ ] T0.4.5 — Branch protection: require all checks green + 1 review
+    - [x] T0.4.6 — Dependabot for GitHub Actions versions
 - [ ] **T0.5 — Quarto project skeleton**
   - [ ] T0.5.1 — `_quarto.yml` with HTML + PDF formats
   - [ ] T0.5.2 — Citation handling: CSL file (Vancouver) + empty `references.bib`

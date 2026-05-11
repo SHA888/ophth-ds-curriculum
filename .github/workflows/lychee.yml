@@ -1,0 +1,22 @@
+name: Link Check (Lychee)
+
+on:
+  schedule:
+    - cron: '0 0 * * 0'   # weekly
+  pull_request:
+    paths:
+      - '**/*.md'
+      - '**/*.qmd'
+      - '**/*.Rmd'
+
+jobs:
+  lychee:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install lychee
+        run: |
+          curl -sSfL https://github.com/lycheeverse/lychee/releases/download/v0.15.1/lychee-v0.15.1-x86_64-unknown-linux-gnu.tar.gz | tar xz
+          sudo mv lychee /usr/local/bin/lychee
+      - name: Run lychee
+        run: lychee "**/*.md" "**/*.qmd" "**/*.Rmd" --verbose --no-progress
