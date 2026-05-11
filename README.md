@@ -183,4 +183,3 @@ Decision deferred to first content PR. See `TODO.md` task `T0.2`.
 
 - [`balinesthesia/mds-curriculum`](https://github.com/balinesthesia/mds-curriculum) — sibling curriculum for anesthesia/ICU; Phase 0 is shared.
 - The ophthalmology AI community — for publishing benchmarks, datasets, and reporting standards openly.
-- 
