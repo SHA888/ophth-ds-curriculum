@@ -1,3 +1,5 @@
+<!-- SPDX-License-Identifier: CC-BY-4.0 -->
+
 # Architecture
 
 > Design rationale for `ophth-ds-curriculum`. This document explains *why* the curriculum is structured the way it is.

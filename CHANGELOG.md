@@ -1,3 +1,5 @@
+<!-- SPDX-License-Identifier: CC-BY-4.0 -->
+
 # Changelog
 
 All notable changes to this curriculum will be documented in this file.

@@ -1,3 +1,5 @@
+<!-- SPDX-License-Identifier: CC-BY-4.0 -->
+
 # TODO
 
 > Atomic, granular build plan for `ophth-ds-curriculum`.
@@ -10,16 +12,16 @@
 
 **Goal:** repository is forkable, contributable, and CI-protected. No curriculum content yet.
 
-- [ ] **T0.1 — Bootstrap repository**
+- [x] **T0.1 — Bootstrap repository**
   - [x] T0.1.1 — Initialize git, push to GitHub
-  - [ ] T0.1.2 — Add `.gitignore` (Python, R, Quarto, OS, editor)
-  - [ ] T0.1.3 — Add `.editorconfig`
-  - [ ] T0.1.4 — Add `CHANGELOG.md` seeded with `## [Unreleased]`
-- [ ] **T0.2 — Decide and commit LICENSE** *(blocks all content tasks)*
-  - [ ] T0.2.1 — Compare CC BY 4.0 vs. CC BY-SA 4.0 vs. dual (CC BY + MIT/Apache-2.0 for code)
-  - [ ] T0.2.2 — Document decision rationale in `ARCHITECTURE.md` § Licensing
-  - [ ] T0.2.3 — Commit `LICENSE` file
-  - [ ] T0.2.4 — Add SPDX header policy to `CONTRIBUTING.md`
+  - [x] T0.1.2 — Add `.gitignore` (Python, R, Quarto, OS, editor)
+  - [x] T0.1.3 — Add `.editorconfig`
+  - [x] T0.1.4 — Add `CHANGELOG.md` seeded with `## [Unreleased]`
+- [x] **T0.2 — Decide and commit LICENSE** *(blocks all content tasks)*
+  - [x] T0.2.1 — Compare CC BY 4.0 vs. CC BY-SA 4.0 vs. dual (CC BY + MIT/Apache-2.0 for code)
+  - [x] T0.2.2 — Document decision rationale in `ARCHITECTURE.md` § Licensing
+  - [x] T0.2.3 — Add and commit `LICENSE` file
+  - [x] T0.2.4 — Add SPDX header policy to `CONTRIBUTING.md`
 - [ ] **T0.3 — Governance docs**
   - [ ] T0.3.1 — `CONTRIBUTING.md` (style, commit conventions, PR checklist)
   - [ ] T0.3.2 — `CODE_OF_CONDUCT.md` (Contributor Covenant v2.1)

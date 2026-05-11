@@ -1,3 +1,5 @@
+<!-- SPDX-License-Identifier: CC-BY-4.0 -->
+
 # Ophthalomology Data Science Curriculum
 
 > A self-learner curriculum for computer science, informatics, and data science applied to **ophthalmology**.
