@@ -48,12 +48,12 @@
 
 ## Milestone `v0.2.0` — Phase 0 references and Phase 1 content
 
-**Goal:** Phase 0 cross-references `mds-curriculum` correctly; Phase 1 is complete and assessable.
+**Goal:** Phase 0 cross-references [mds-curriculum](https://github.com/balinesthesia/mds-curriculum) correctly; Phase 1 is complete and assessable.
 
-- [ ] **T1.0 — Phase 0 referencing**
-  - [ ] T1.0.1 — `phases/00-foundation/README.qmd` explaining the reuse of `mds-curriculum` Tiers 1–2
-  - [ ] T1.0.2 — Diagnostic-accuracy statistics appendix (ophthalmology-flavored examples: screening prevalence, DR grades)
-  - [ ] T1.0.3 — Phase 0 assessment checklist
+- [x] **T1.0 — Phase 0 referencing**
+  - [x] T1.0.1 — `phases/00-foundation/README.qmd` explaining the reuse of `mds-curriculum` Tiers 1–2
+  - [x] T1.0.2 — Diagnostic-accuracy statistics appendix (ophthalmology-flavored examples: screening prevalence, DR grades)
+  - [x] T1.0.3 — Phase 0 assessment checklist
 - [ ] **T1.1 — Phase 1 module: image as ndarray**
   - [ ] T1.1.1 — Reading: numpy array semantics, dtype, memory layout
   - [ ] T1.1.2 — Exercise: load JPEG fundus, inspect shape/dtype, save round-trip
