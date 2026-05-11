@@ -9,6 +9,24 @@ and this project adheres to [Semantic Versioning 2.0.0](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-XX-XX
+
+### Added
+- Full CC BY 4.0 legal code in LICENSE
+- Mandatory SPDX header policy and DCO in CONTRIBUTING.md
+- README status updated to v0.0.2
+- ARCHITECTURE § Licensing section
+- Restored comprehensive .gitignore
+- CI workflows: markdownlint, lychee, Quarto render, gitleaks, Dependabot
+- Quarto project skeleton (config, CSL, sidebar, landing page)
+
+### Fixed
+- Fixed typo in README title
+- Fixed stray bullet in ARCHITECTURE.md
+
+### Changed
+- Updated TODO items to reflect completed tasks
+
 ## [0.0.1] — 2026-05-11
 
 Surgical scaffold update informed by review of the UC San Diego Ophthalmology Informatics & Data Science Fellowship pedagogy. All changes additive; no existing content mutated; all original task numbers preserved (new tasks inserted with letter suffixes).
