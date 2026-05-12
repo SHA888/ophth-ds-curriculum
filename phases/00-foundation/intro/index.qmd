@@ -1,6 +1,6 @@
 # Introductory Course
 
-**Duration:** 4 weeks  
+**Duration:** 4 weeks
 **Goal:** Zero-assumption entry path — establish shared toolchain competence before Basic tier content begins
 
 ---

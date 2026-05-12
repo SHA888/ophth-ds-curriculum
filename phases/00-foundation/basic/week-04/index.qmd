@@ -70,7 +70,7 @@ median(map)
 
 ```r
 # Ordinal variable — ASA class
-asa <- ordered(c("II", "III", "II", "IV", "III", "II"), 
+asa <- ordered(c("II", "III", "II", "IV", "III", "II"),
                levels = c("I", "II", "III", "IV", "V", "VI"))
 table(asa)
 names(which.max(table(asa)))  # Returns the most frequent category ("II")
@@ -131,7 +131,7 @@ icu_time <- data.frame(
   days_in_icu = c(5, 12, 8, 3),
   died_in_icu = c(0, 1, 0, 1)  # 0 = censored (discharged alive), 1 = event (died)
 )
-# Patient 101 and 103 are censored — we know they survived ICU, 
+# Patient 101 and 103 are censored — we know they survived ICU,
 # but not their total survival time
 ```
 
@@ -146,7 +146,7 @@ Factors are R's way of storing categorical data. They look like text but store n
 sex <- factor(c("male", "female", "female", "male"))
 
 # Ordinal factor (explicit order)
-asa <- ordered(c("II", "III", "II", "IV"), 
+asa <- ordered(c("II", "III", "II", "IV"),
                levels = c("I", "II", "III", "IV", "V"))
 
 # Check the levels
@@ -214,7 +214,7 @@ Create the following variables in R, ensuring correct types:
 
 ```r
 # 1. ASA classes for 6 patients: II, III, II, IV, III, II
-asa <- ordered(c("II", "III", "II", "IV", "III", "II"), 
+asa <- ordered(c("II", "III", "II", "IV", "III", "II"),
                levels = c("I", "II", "III", "IV", "V", "VI"))
 
 # 2. Sex for the same 6 patients: male, female, female, male, male, female

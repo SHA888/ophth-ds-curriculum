@@ -165,4 +165,3 @@ If not, schedule 1-on-1. Data structures are foundational — Week 4 (data types
 Preview: Week 4 covers clinical data types (continuous, ordinal, nominal, time-to-event). The tidy dataset you built this week will be classified by type next week. Same data, new lens.
 
 End session with: "This week you learned how to structure data. Next week you learn how to classify it. Then you can analyze it."
-

@@ -1,7 +1,7 @@
 # Intermediate Tier
 
-**Duration:** 20 weeks  
-**Language:** Python  
+**Duration:** 20 weeks
+**Language:** Python
 **Goal:** Independent analyst, researcher/builder entry
 
 ---

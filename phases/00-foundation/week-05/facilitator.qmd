@@ -193,4 +193,3 @@ If not, schedule 1-on-1. Week 6 (visualization) and Week 7 (Table 1) assume thes
 Preview: "This week you described distributions with numbers. Next week you draw them. A histogram of ICU LOS will show the right skew immediately — no math needed. You'll also learn `ggplot2`, the visualization grammar that produces every figure in clinical research. The summaries from this week become the axis labels and annotations of next week's plots."
 
 End session with: "Numbers describe. Pictures convince. Next week: pictures."
-

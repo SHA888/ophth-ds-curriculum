@@ -198,4 +198,4 @@ Operationally:
 - A learner approaching `v1.0.0` of their own progression should expect to mentor at least one subsequent learner.
 - Mentor pairing should be lightweight: monthly check-in + on-demand paper discussion + capstone review. Not a full apprenticeship.
 - Mentors are not expected to be experts beyond the next learner's current phase. Stay-one-phase-ahead is sufficient and sustainable.
-- 
+-

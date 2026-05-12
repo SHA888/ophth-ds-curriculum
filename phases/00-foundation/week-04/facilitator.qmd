@@ -39,7 +39,7 @@ Emphasize: "You need both. This week gives you the second half."
 This is the classic teaching moment. Show it live:
 
 ```r
-asa <- ordered(c("II", "III", "II", "IV", "III", "II"), 
+asa <- ordered(c("II", "III", "II", "IV", "III", "II"),
                levels = c("I", "II", "III", "IV", "V", "VI"))
 
 mean(asa)  # Returns 2.333 — what does this mean?
@@ -209,4 +209,3 @@ If not, schedule 1-on-1. Week 5 (distributions) and Week 8 (inference) depend he
 ## Connection to Week 5
 
 Preview: "Next week we start Exploratory Data Analysis. Now that you know how to structure data (tidy) and classify it (types), you'll learn to describe it — distributions, shape, center, spread. The histogram you draw for continuous MAP will look completely different from the bar chart for ordinal ASA. You'll know why."
-

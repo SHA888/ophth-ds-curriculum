@@ -140,4 +140,3 @@ If not, schedule 1-on-1 before Week 2.
 Preview: Week 2 transitions to technical skills — R, Quarto, GitHub. The philosophical foundation from Week 1 motivates the technical work: we learn these tools not for their own sake, but to make our own work reproducible and to verify the work of others.
 
 End session with: "Next week, you start building the skills to prevent what we analyzed today."
-

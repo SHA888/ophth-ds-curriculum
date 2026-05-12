@@ -154,4 +154,3 @@ If not, schedule 1-on-1 before Week 3.
 Preview: Week 3 introduces data structures and tidy data. You will take the Quarto skills from this week and apply them to real (messy) clinical data. The document structure is the same; the data is more complex.
 
 End session with: "Week 1 told you why reproducibility matters. Week 2 gave you the tool. Week 3 starts applying it to anesthesia data."
-

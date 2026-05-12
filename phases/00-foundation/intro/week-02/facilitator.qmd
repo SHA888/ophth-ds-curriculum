@@ -101,7 +101,7 @@ git log --oneline -3
 
 1. **Fork:** Show on GitHub UI. Point out "forked from balinesthesia/mds-curriculum" at top.
 
-2. **Clone their fork:** 
+2. **Clone their fork:**
    ```bash
    git clone git@github.com:USERNAME/mds-curriculum.git my-fork
    cd my-fork
@@ -116,7 +116,7 @@ git log --oneline -3
 
 5. **Commit:** Standard add/commit.
 
-6. **Push:** 
+6. **Push:**
    ```bash
    git push origin my-first-edit
    ```

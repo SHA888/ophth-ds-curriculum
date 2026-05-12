@@ -1,7 +1,7 @@
 # Basic Tier
 
-**Duration:** 16 weeks  
-**Language:** R  
+**Duration:** 16 weeks
+**Language:** R
 **Goal:** Critical consumer + reproducible researcher
 
 ---
@@ -121,7 +121,7 @@ Before starting Basic tier, residents must complete environment setup:
 - Git + GitHub account with SSH
 - Essential packages: tidyverse, tableone, survival, survminer
 
-**Setup Guide:** `../facilitator/setup-guide.qmd`  
+**Setup Guide:** `../facilitator/setup-guide.qmd`
 **Verification Checklist:** `../facilitator/verification-checklist.qmd`
 
 ---
