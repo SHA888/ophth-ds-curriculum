@@ -1,0 +1,15 @@
+---
+title: Pitfalls — CLAHE and Color Spaces
+---
+
+## CLAHE tile size
+
+Too small (e.g., 2×2) produces noise amplification; too large (e.g., 64×64) yields minimal local effect. Typical: 8×8 or 16×16.
+
+## Over-enhancement artifacts
+
+High clip limits can cause unnatural contrast and amplify sensor noise. Start with `clipLimit=2.0` and adjust conservatively.
+
+## Green channel usage
+
+While the green channel carries the most signal for retinal vasculature, some tasks (e.g., optic disc detection) benefit from using all channels or converting to LAB and using the L channel.

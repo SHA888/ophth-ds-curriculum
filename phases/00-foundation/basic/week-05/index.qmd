@@ -1,0 +1,251 @@
+---
+title: "Week 5 — Exploratory Data Analysis I: Distributions, Shape, Spread, Outliers"
+---
+
+## Learning Objectives
+
+By the end of this session, you will be able to:
+
+- Compute and interpret measures of center (mean, median, mode) for clinical data
+- Compute and interpret measures of spread (range, IQR, standard deviation, variance)
+- Describe distribution shape: symmetric, skewed left/right, unimodal/bimodal
+- Identify and handle outliers: understand when they are errors vs. real clinical signal
+- Choose appropriate summaries based on data type (continuous vs. ordinal)
+- Produce a complete descriptive summary of a clinical dataset in a Quarto document
+
+## Why EDA Matters Before Analysis
+
+Before running any statistical test, you must understand your data's distribution. The distribution tells you:
+
+- **Which test is valid** — t-test assumes approximately normal; skewed data needs non-parametric alternatives
+- **Where the data came from** — a bimodal distribution might indicate two patient populations
+- **What is suspicious** — an outlier could be a data entry error (weight = 700 kg) or a real clinical event (weight = 12 kg — neonate in adult ICU data)
+- **How to report it** — mean ± SD for symmetric; median [IQR] for skewed
+
+**EDA is not optional. It is the step that prevents you from reporting meaningless statistics.**
+
+## Core Concepts
+
+### Measures of Center
+
+| Measure | Best For | R Function | Clinical Example |
+|---------|----------|------------|------------------|
+| **Mean** | Symmetric, continuous data | `mean()` | Mean MAP in a stable cohort |
+| **Median** | Skewed data, ordinal data | `median()` | Median ICU LOS (right-skewed: most short, some very long) |
+| **Mode** | Categorical/nominal data | `table()` then max | Most common diagnosis |
+
+**Rule:** For skewed continuous data (common in clinical data), always report median and IQR, not mean and SD.
+
+### Measures of Spread
+
+| Measure | Best For | R Function | Clinical Example |
+|---------|----------|------------|------------------|
+| **Range** | Quick check; vulnerable to outliers | `range()` or `max() - min()` | Age range in study |
+| **IQR** | Robust measure for skewed data | `IQR()` | IQR of creatinine — not affected by one patient on dialysis |
+| **Standard Deviation** | Symmetric, normal-ish data | `sd()` | SD of MAP in controlled setting |
+| **Variance** | Mathematical foundation; rarely reported | `var()` | Used in calculations, not tables |
+
+**The 1.5 × IQR rule for outliers:** Values below Q1 - 1.5×IQR or above Q3 + 1.5×IQR are flagged. This is a convention, not a clinical judgment.
+
+### Distribution Shape
+
+| Shape | Description | Common in Clinical Data | Example |
+|-------|-------------|------------------------|---------|
+| **Symmetric** | Mean ≈ median; mirror image | Height, BMI in homogeneous population | — |
+| **Right-skewed** | Tail extends right; mean > median | Length of stay, cost, waiting times | ICU LOS: most 2-3 days, some 30+ |
+| **Left-skewed** | Tail extends left; mean < median | Less common; test scores with ceiling effect | Pain scores near 0 (floor effect creates left skew) |
+| **Bimodal** | Two peaks | Mixed populations | Hospital-wide age: pediatric peak + adult peak |
+| **Uniform** | Flat; all values equally likely | Rare in biology | Randomized treatment assignment |
+
+### Outliers: Error vs. Signal
+
+**Critical clinical skill:** Distinguishing data entry errors from genuine extreme values.
+
+| Scenario | Action | Example |
+|----------|--------|---------|
+| Clearly impossible | Remove and document | Heart rate = 500; weight = 700 kg |
+| Extreme but physiologically possible | Keep; investigate | MAP = 40 (shock), MAP = 150 (hypertensive crisis) |
+| Unusual combination | Keep; may be signal | ASA V patient in elective surgery dataset |
+| Same value repeated | Check instrument | SpO2 = 100.0 for 6 hours straight (probe may be off) |
+
+**Never silently delete outliers.** Document every removal with clinical rationale.
+
+## Exercise
+
+### Part 1: Create a Simulated Clinical Dataset
+
+Create a dataset of 20 patients with the following variables. Use base R only (no packages needed).
+
+```r
+# Set seed for reproducibility
+set.seed(42)
+
+# Patient IDs
+patient_id <- 101:120
+
+# Age: approximately normal, mean 55, SD 15
+age <- round(rnorm(20, mean = 55, sd = 15))
+age <- pmax(age, 18)  # Minimum age 18
+age <- pmin(age, 90)  # Maximum age 90
+
+# Propofol induction dose (mg): weight-based (2 mg/kg), with some variation
+# First create weights
+weight_kg <- round(rnorm(20, mean = 70, sd = 15))
+weight_kg <- pmax(weight_kg, 40)
+weight_kg <- pmin(weight_kg, 120)
+
+# Propofol dose with clinical variation (some underdose, some overdose)
+propofol_mg <- round(weight_kg * rnorm(20, mean = 2.0, sd = 0.3))
+
+# Add one outlier: data entry error (weight recorded in pounds, not kg)
+# Patient 110: propofol_mg was calculated from the correct weight (~63 kg with seed 42)
+# Then weight is overwritten to 154 (pounds entered instead of kg)
+# Expected result with seed 42: mg_per_kg for patient 110 ≈ 0.8 (far below clinical range 1.5-2.5)
+weight_kg[10] <- 154  # Data entry error — do not change without updating seed
+
+# ASA class: mostly II-III, some IV
+asa <- sample(c("I", "II", "II", "II", "III", "III", "III", "IV"), 20, replace = TRUE)
+
+# Case duration (minutes): right-skewed (most short, some very long)
+# meanlog/sdlog are parameters of the underlying normal (log scale), not the output mean/SD
+# With meanlog=4.5, sdlog=0.8: median output ≈ exp(4.5) ≈ 90 min; mean output ≈ 120 min
+case_duration <- round(rlnorm(20, meanlog = 4.5, sdlog = 0.8))
+
+# Combine into data frame
+patients <- data.frame(
+  patient_id = patient_id,
+  age = age,
+  weight_kg = weight_kg,
+  propofol_mg = propofol_mg,
+  asa = ordered(asa, levels = c("I", "II", "III", "IV", "V")),
+  case_duration_min = case_duration
+)
+
+patients
+```
+
+### Part 2: Summarize Each Variable
+
+For each continuous variable (`age`, `weight_kg`, `propofol_mg`, `case_duration_min`), compute:
+
+```r
+# Example for age
+summary(patients$age)
+mean(patients$age)
+median(patients$age)
+sd(patients$age)
+IQR(patients$age)
+range(patients$age)
+
+# Check skew: mean vs. median
+mean(patients$age) - median(patients$age)
+```
+
+For `asa` (ordinal), compute:
+
+```r
+table(patients$asa)
+names(which.max(table(patients$asa)))  # Most frequent ASA class (mode)
+# Note: base R median() does not support factors — use table() for ordinal summaries
+```
+
+**Document your findings in your Quarto document.** For each variable, note:
+- Mean vs. median: is the data skewed?
+- Are there obvious outliers?
+- What would you report in a paper (mean±SD or median [IQR])?
+
+### Part 3: Identify and Investigate the Outlier
+
+You know there is one data entry error in the dataset (patient 110's weight). Find it using summary statistics:
+
+```r
+# Check weight distribution
+summary(patients$weight_kg)
+
+# Flag outliers using 1.5 × IQR rule
+Q1 <- quantile(patients$weight_kg, 0.25)
+Q3 <- quantile(patients$weight_kg, 0.75)
+IQR_val <- IQR(patients$weight_kg)
+
+lower_bound <- Q1 - 1.5 * IQR_val
+upper_bound <- Q3 + 1.5 * IQR_val
+
+patients$weight_kg[patients$weight_kg < lower_bound | patients$weight_kg > upper_bound]
+```
+
+**Questions:**
+1. Which patient is flagged as an outlier?
+2. What is the most likely explanation (clinical extreme vs. data entry error)?
+3. What should you do with this value for analysis? What should you do with it for reporting?
+
+### Part 4: Dose-Weight Relationship
+
+Investigate whether propofol dose is reasonably related to weight:
+
+```r
+# Calculate mg/kg for each patient
+patients$mg_per_kg <- patients$propofol_mg / patients$weight_kg
+
+summary(patients$mg_per_kg)
+
+# Which patient has the extreme (lowest) mg/kg ratio?
+patients$patient_id[which.min(patients$mg_per_kg)]
+```
+
+**Question:** Does this confirm your outlier diagnosis? What would the correct weight be if the entry was in pounds?
+
+### Part 5: Report a Table of Descriptive Statistics
+
+Create a summary table in your Quarto document with the following structure:
+
+| Variable | Type | n | Mean (SD) or Median [IQR] | Range | Notes |
+|----------|------|---|---------------------------|-------|-------|
+| Age | Continuous | 20 | ? | ? | ? |
+| Weight (kg) | Continuous | 20 | ? | ? | ? |
+| Propofol dose (mg) | Continuous | 20 | ? | ? | ? |
+| ASA class | Ordinal | 20 | ? | ? | ? |
+| Case duration (min) | Continuous | 20 | ? | ? | ? |
+
+For continuous variables, choose mean±SD **or** median [IQR] based on distribution shape. Justify your choice.
+
+### Part 6: Reflection
+
+Write 2–3 sentences:
+
+> Why is it dangerous to report "mean ± SD" for every continuous variable without checking the distribution first? Describe a clinical scenario where this would mislead readers.
+
+---
+
+## Common Pitfalls
+
+| Pitfall | Why It Happens | How to Prevent |
+|---------|----------------|----------------|
+| "I reported mean ± SD for ICU LOS" | Mean ± SD is the default in many templates | Always check skew: `mean > median` → right-skewed → report median [IQR] |
+| "I deleted the outlier without documenting it" | Outliers make analysis "messy" | Document: "Patient 110 excluded: weight recorded in pounds, confirmed by mg/kg ratio" |
+| "I assumed normal distribution because the sample size is large" | Misunderstanding Central Limit Theorem | CLT applies to sampling distribution of the mean, not the data itself. Check histogram. |
+| "I reported 3 significant figures for n=20" | Default R output | Round appropriately: for n=20, one decimal place for means is sufficient |
+| "I forgot to set.seed()" | Results change every render | Always `set.seed()` before `rnorm()`, `sample()`, etc. for reproducibility |
+
+## Verification
+
+Before leaving this session, confirm you can:
+
+- [ ] Generate reproducible random data with `set.seed()`
+- [ ] Compute mean, median, SD, IQR, and range for continuous variables
+- [ ] Determine whether data is symmetric or skewed using mean vs. median
+- [ ] Identify outliers using the 1.5 × IQR rule
+- [ ] Distinguish data entry errors from genuine clinical extremes
+- [ ] Choose appropriate summary statistics based on distribution shape
+- [ ] Produce a clean summary table in a Quarto document
+- [ ] Push your document to GitHub
+
+## Resources
+
+- **R for Data Science (2e):** [r4ds.hadley.nz/eda.html](https://r4ds.hadley.nz/eda.html) — EDA chapter
+- **Describing Distributions:** [Khan Academy — Statistics and Probability](https://www.khanacademy.org/math/statistics-probability)
+- **Propofol Dosing:** Miller's Anesthesia, 9th ed. — Standard induction dose 1.5–2.5 mg/kg IV
+- **ASA Physical Status:** [ASA House of Delegates](https://www.asahq.org/standards-and-practice-parameters/statement-on-asa-physical-status-classification-system)
+
+---
+
+[← Back to Basic Tier](../index.qmd)

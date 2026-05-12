@@ -1,0 +1,24 @@
+---
+title: "Basic Tier"
+subtitle: "16 weeks · R · Reproducible Researcher"
+---
+
+## Overview
+
+The Basic tier transforms clinicians into reproducible researchers. Residents learn to read, critique, and reproduce the statistical methods they encounter in anesthesia literature.
+
+## Why R?
+
+Clinical literature residents read is predominantly R-generated (`tableone`, `survival`, `ggplot2`). Teaching R at Basic means they can read and reproduce the code in papers they cite within weeks. Immediate clinical payoff drives retention.
+
+## Capstone
+
+Quarto report reproducing and critiquing a published anesthesia paper + R code on GitHub.
+
+## Modules
+
+*Coming soon. Module structure: Week 1–16 with `index.qmd` (resident-facing) and `facilitator.qmd` (facilitator notes).*
+
+---
+
+[← Back to Home](../index.qmd)

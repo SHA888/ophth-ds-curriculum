@@ -1,0 +1,157 @@
+---
+title: "Week 2 — Facilitator Notes"
+subtitle: "Literate Programming for Reproducible Research"
+---
+
+## Learning Objectives
+
+Residents should connect Week 1's philosophical analysis (reproducibility crisis, Retraction Watch) to concrete technical practice. They should leave able to create a Quarto document that is transparent, version-controlled, and reproducible. This session bridges "why" and "how."
+
+---
+
+## Session Format
+
+| Segment | Duration | Activity |
+|---------|----------|----------|
+| Connection | 10 min | Recap Week 1: which failure modes would literate programming have prevented? |
+| Lecture | 15 min | The reproducibility stack; chunk options; YAML as documentation |
+| Live Demo | 20 min | Build the exercise document together, render, inspect HTML |
+| Independent Exercise | 30 min | Residents complete Part 1–3 alone; facilitator circulates |
+| Reflection & Share | 15 min | Part 4: residents share one Retraction Watch connection |
+| Check-in | 10 min | Verify GitHub pushes; preview Week 3 (data structures) |
+
+---
+
+## Key Teaching Points
+
+### Connect Week 1 to Week 2
+
+Begin with the question: "Of the papers you analyzed last week, which failures would have been caught if the authors had published their code in a Quarto document?"
+
+Expected answers:
+- **Statistical error:** visible code; reviewers can re-run
+- **Unavailable data:** the `.qmd` file shows exactly what was done, even if raw data is restricted
+- **P-hacking:** version control shows all analyses attempted, not just reported ones
+
+This connection is the **motivational bridge** for the entire tier. If residents don't feel this link, they will see Quarto as a chore, not a protection.
+
+### The "Echo: True" Default
+
+Many residents will want to hide code (`echo: false`) because it looks "cleaner." Push back explicitly:
+
+> "In this course, `echo: true` is the default. If you hide your code, you are doing exactly what the retracted papers did — asking readers to trust your prose description. We don't trust. We verify."
+
+Exceptions are allowed for:
+- Final capstone submission (after peer review confirms correctness)
+- Patient-facing output (where code would confuse)
+- Facilitator-approved cases
+
+### Inline Expressions Prevent Stale Text
+
+Demonstrate the failure mode:
+
+1. Write: "The mean MPG is 20.1." (hard-coded)
+2. Change the data filter
+3. Re-render
+4. The text still says 20.1, but the code output shows 18.3
+
+Then show the fix: `` `r round(mean(mtcars$mpg), 1)` `` — text updates automatically.
+
+This is a **small teaching moment with large consequences.** Residents who learn this now will not have inconsistent manuscripts later.
+
+### GitHub Push Verification
+
+Many residents will have forgotten Git commands from Intro Week 2. Have a cheat sheet ready:
+
+```bash
+git status          # What's changed?
+git add filename    # Stage
+git commit -m "message"  # Commit
+git push            # Push
+```
+
+Common failures:
+- Not in a Git repository (forgot `git init`)
+- No remote configured (forgot to create GitHub repo)
+- SSH key not in agent (`ssh-add` needed)
+
+---
+
+## Live Demo Script
+
+**Build the document step by step:**
+
+1. Create new Quarto doc in RStudio
+2. Show YAML header — explain each field
+3. Add a prose section — "This is documentation"
+4. Add a code chunk — `data(mtcars); head(mtcars)`
+5. Render — show HTML output
+6. Add `message: false` — re-render, show cleaner output
+7. Add inline expression — `` `r mean(mtcars$mpg)` ``
+8. Re-render — show updated text
+
+**Key pause points:**
+- After YAML: "This header is the first thing a replicator sees."
+- After first render: "Anyone can download this file and get the same output."
+- After inline expression: "The text updates automatically. You cannot forget."
+
+---
+
+## Exercise Guidance
+
+**Part 1:** Residents often struggle with YAML indentation (spaces vs tabs). Walk the room early.
+
+**Part 2:** The `mtcars` dataset is built into R — no package installation needed. This isolates the exercise to Quarto mechanics, not data wrangling.
+
+**Part 3:** Git push is the most common failure point. Have residents verify their push by showing the file on GitHub in a browser.
+
+**Part 4:** Reflection quality varies. Look for:
+- Specific connection to a paper they analyzed (not generic)
+- Recognition that transparency is protection
+- Commitment to using this workflow in their own work
+
+---
+
+## Troubleshooting During Session
+
+| Problem | Quick Fix |
+|---------|-----------|
+| YAML render error | Check indentation (spaces, not tabs); check colon spacing |
+| "Object not found" | Code chunk not executed before inline expression; re-render |
+| Git "not a repository" | `git init` in `~/mds-work`, then `git remote add origin ...` |
+| Git push fails | Check `git remote -v`; verify SSH key with `ssh -T git@github.com` |
+| HTML looks wrong | Check that `.qmd` file was saved before rendering |
+| Inline expression shows raw text | Missing backtick-r syntax; check for spaces inside backticks |
+
+---
+
+## Assessment
+
+Verify each resident can:
+
+- [ ] Explain one Retraction Watch failure that literate programming prevents
+- [ ] Create a `.qmd` with YAML, prose, code, and inline expressions
+- [ ] Render to HTML without errors
+- [ ] Push `.qmd` and `.html` to GitHub
+- [ ] Identify why `echo: true` is the default in this course
+
+If not, schedule 1-on-1 before Week 3.
+
+---
+
+## Preparation Checklist
+
+- [ ] Tested RStudio Quarto template on classroom machines
+- [ ] Prepared Git cheat sheet handout
+- [ ] Selected 2–3 Week 1 Retraction Watch papers to reference
+- [ ] Verified classroom WiFi allows GitHub SSH access
+- [ ] Identified residents who may need Git refresher
+
+---
+
+## Connection to Week 3
+
+Preview: Week 3 introduces data structures and tidy data. You will take the Quarto skills from this week and apply them to real (messy) clinical data. The document structure is the same; the data is more complex.
+
+End session with: "Week 1 told you why reproducibility matters. Week 2 gave you the tool. Week 3 starts applying it to anesthesia data."
+

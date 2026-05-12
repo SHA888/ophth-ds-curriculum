@@ -1,0 +1,17 @@
+---
+title: Pitfalls — File Formats
+---
+
+## JPEG compression artifacts
+
+Lossy compression can blur fine vessel details. Use lossless formats (PNG, TIFF) for intermediate storage when possible.
+
+## DICOM tag pitfalls
+
+- `BitsStored` vs. `BitsAllocated`: the actual data depth may be less.
+- `PhotometricInterpretation`: MONOCHROME1 vs. MONOCHROME2 affects display.
+- Transfer syntax (compressed vs. uncompressed) determines whether pixel data is directly accessible.
+
+## Vendor format lock-in
+
+Heidelberg `.e2e` and similar may require proprietary SDKs for full functionality. Prefer converting to DICOM or open formats for long-term accessibility.

@@ -1,0 +1,19 @@
+---
+title: Exercise — Parse HVF and Compute MD
+---
+
+## Objective
+
+Parse a sample Humphrey Visual Field (HVF) export (XML or CSV) and compute Mean Deviation (MD) by hand.
+
+## Steps
+
+1. Obtain a sample HVF export (e.g., `patient_hvf.xml` or `.csv`).
+2. Extract the threshold values for each test point.
+3. Retrieve the age‑matched normal database values for the same pattern (24‑2 or 30‑2).
+4. Compute MD = average difference between patient thresholds and normal values.
+5. Compare your computed MD to the MD reported in the file.
+
+## Deliverable
+
+A script `compute_md.py` that prints the computed MD and the expected MD.

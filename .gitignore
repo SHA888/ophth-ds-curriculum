@@ -14,8 +14,6 @@ __pycache__/
 
 # Quarto
 _site/
-*.qmd
-*.ipynb
 
 # OS
 .DS_Store

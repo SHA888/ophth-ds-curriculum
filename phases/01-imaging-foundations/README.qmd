@@ -1,0 +1,24 @@
+---
+title: Phase 1 — Imaging Foundations
+---
+
+## Overview
+
+Phase 1 equips learners with the fundamentals of medical image handling specific to ophthalmology. By the end, they can load, preprocess, and understand the file formats of fundus images and OCT.
+
+## Modules
+
+1. **Image as ndarray** — shapes, dtypes, memory layout, pitfalls (BGR/RGB, normalization).
+2. **Color spaces & preprocessing** — RGB/HSV/LAB, green channel significance, CLAHE.
+3. **File formats** — JPEG/TIFF/PNG, DICOM, OCT vendor formats (Heidelberg, Topcon, Zeiss).
+4. **Perimetry as tabular data** — HVF grids, MD/PSD/VFI metrics, parsing and computing MD.
+
+Each module includes a reading, an exercise, and a pitfalls section.
+
+## Capstone
+
+Build an end‑to‑end preprocessing pipeline for a fundus image set (see `capstone-pipeline.qmd`).
+
+## Assessment
+
+Binary rubrics are provided for each module and the capstone. See `assessments/phase-1-*.md`.

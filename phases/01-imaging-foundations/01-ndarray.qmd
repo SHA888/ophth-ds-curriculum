@@ -1,0 +1,9 @@
+---
+title: Image as ndarray
+---
+
+## Reading
+
+- NumPy array semantics: shape, dtype, strides
+- Memory layout: C-contiguous vs. Fortran-contiguous
+- Views vs. copies

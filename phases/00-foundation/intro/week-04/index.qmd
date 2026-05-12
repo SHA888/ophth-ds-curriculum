@@ -1,0 +1,257 @@
+---
+title: "Week 4 — Programming Concepts + Statistics Refresher"
+---
+
+## Learning Objectives
+
+By the end of this session, you will be able to:
+
+- Define and use variables, data types, and functions
+- Read and write CSV files in R
+- Compute summary statistics (mean, median, SD)
+- Understand distributions and p-values conceptually
+- Load data, analyze it, and save results
+
+## Why This Matters
+
+Clinical data is messy and complex. Programming gives you the tools to:
+
+- Process thousands of patient records systematically
+- Reproduce your analysis exactly
+- Share your methods transparently
+
+## Core Concepts
+
+### Variables and Data Types
+
+| Type | Example | Clinical Example |
+|------|---------|------------------|
+| Numeric | `70.5` | Patient weight, lab value |
+| Integer | `42L` | Patient count, age in years |
+| Character | `"Male"` | Sex, diagnosis code |
+| Logical | `TRUE` | Event occurred? (yes/no) |
+| Factor | `factor("Severe")` | Ordered category (ASA I-V) |
+
+### Data Structures
+
+```r
+# Vector (one column)
+ages <- c(45, 62, 33, 58, 71)
+
+# Data frame (table)
+patients <- data.frame(
+  id = 1:5,
+  age = ages,
+  sex = c("M", "F", "F", "M", "M"),
+  bmi = c(24.5, 28.2, 22.1, 31.5, 26.0)
+)
+```
+
+### Functions
+
+A function takes input, does something, returns output:
+
+```r
+# Built-in
+mean(patients$age)
+sd(patients$bmi)
+
+# Your own
+calculate_bmi <- function(weight_kg, height_m) {
+  bmi <- weight_kg / (height_m ^ 2)
+  return(bmi)
+}
+
+calculate_bmi(70, 1.75)  # 22.86
+```
+
+## File I/O
+
+### Reading CSV
+
+```r
+# Load data
+data <- read_csv("patients.csv")
+
+# View structure
+str(data)
+head(data)
+```
+
+### Writing CSV
+
+```r
+# Save results
+write_csv(results, "analysis_output.csv")
+```
+
+## Statistics Refresher (No Code)
+
+### Measures of Central Tendency
+
+| Measure | When to Use | Example |
+|---------|-------------|---------|
+| **Mean** | Symmetric data, no outliers | Average MAP in stable patients |
+| **Median** | Skewed data, outliers present | ICU length of stay (some very long stays) |
+| **Mode** | Categorical data | Most common ASA class |
+
+### Spread
+
+| Measure | Interpretation |
+|---------|--------------|
+| **SD** | Typical distance from mean |
+| **IQR** | Range of middle 50% of data |
+| **Range** | Min to max (sensitive to outliers) |
+
+### Distributions
+
+- **Normal (Gaussian):** Symmetric, bell-shaped (e.g., height in adults)
+- **Skewed right:** Tail to the right (e.g., hospital length of stay)
+- **Skewed left:** Tail to the left (rare in clinical data)
+- **Bimodal:** Two peaks (e.g., blood pressure by sex)
+
+### The p-value
+
+A **p-value** is the probability of seeing your result (or more extreme) if the null hypothesis were true.
+
+- Small p (e.g., < 0.05): Unlikely under null → "statistically significant"
+- Large p (e.g., > 0.05): Plausibly under null → "not significant"
+
+**Warning:** Statistical significance ≠ clinical importance. A drug can lower blood pressure by 0.5 mmHg with p < 0.001 and still be clinically meaningless.
+
+## Exercise
+
+### Part 1: Load and Explore Data
+
+Create a CSV file `~/mds-work/patients.csv`:
+
+```csv
+id,age,sex,weight_kg,height_m,systolic_bp
+1,45,M,70,1.75,120
+2,62,F,65,1.60,135
+3,33,F,55,1.55,110
+4,58,M,85,1.80,145
+5,71,M,78,1.70,150
+```
+
+Now in R:
+
+```r
+library(tidyverse)
+
+# Load
+patients <- read_csv("~/mds-work/patients.csv")
+
+# Explore
+str(patients)
+summary(patients)
+```
+
+### Part 2: Calculate Statistics
+
+```r
+# Age statistics
+mean(patients$age)
+median(patients$age)
+sd(patients$age)
+
+# BMI calculation
+patients <- patients |>
+  mutate(
+    bmi = weight_kg / (height_m ^ 2),
+    bmi_category = case_when(
+      bmi < 18.5 ~ "Underweight",
+      bmi < 25 ~ "Normal",
+      bmi < 30 ~ "Overweight",
+      TRUE ~ "Obese"
+    )
+  )
+
+# Summary by category
+patients |>
+  group_by(bmi_category) |>
+  summarise(
+    n = n(),
+    mean_sbp = mean(systolic_bp),
+    sd_sbp = sd(systolic_bp)  # NA when n = 1 — expected with small datasets
+  )
+```
+
+### Part 3: Save Results
+
+```r
+# Save processed data
+write_csv(patients, "~/mds-work/patients_analyzed.csv")
+
+# Save summary statistics
+summary_stats <- patients |>
+  summarise(
+    across(c(age, bmi, systolic_bp), list(mean = mean, sd = sd, median = median))
+  )
+
+write_csv(summary_stats, "~/mds-work/summary_stats.csv")
+```
+
+### Part 4: Create a Quarto Report
+
+Create `~/mds-work/week4-report.qmd`:
+
+````markdown
+---
+title: "Week 4 Analysis Report"
+author: "Your Name"
+date: "2026-04-15"
+---
+
+## Data Summary
+
+Analyzing N patients.  
+Mean age: X years.  
+Mean BMI: Y.  
+*(Replace N, X, Y with inline R expressions: backtick-r-nrow, backtick-r-mean, etc.)*
+
+## By BMI Category
+
+```r
+patients |>
+  group_by(bmi_category) |>
+  summarise(n = n(), mean_sbp = mean(systolic_bp)) |>
+  knitr::kable()
+```
+
+## Conclusion
+
+Data processing complete. Files saved to `patients_analyzed.csv`.
+````
+
+Render and push to GitHub.
+
+## Common Pitfalls
+
+| Problem | Solution |
+|---------|----------|
+| "File not found" | Check working directory: `getwd()`; use full path |
+| Factor vs character confusion | Use `stringsAsFactors = FALSE` or `read_csv()` |
+| NA values break calculations | Use `na.rm = TRUE`: `mean(x, na.rm = TRUE)` |
+| Wrong variable type | Convert: `as.numeric()`, `as.character()` |
+
+## Verification
+
+Before leaving this session, confirm you can:
+
+- [ ] Create a data frame with multiple variable types
+- [ ] Write a simple function
+- [ ] Read a CSV file and inspect its structure
+- [ ] Calculate mean, median, and SD
+- [ ] Add a new calculated column to data
+- [ ] Save results to CSV
+- [ ] Explain when to use mean vs median
+
+## Resources
+
+- [R for Data Science: Data transformation](https://r4ds.had.co.nz/transform.html)
+- [Statistical Rethinking](https://xcelab.net/rm/statistical-rethinking/) — Conceptual depth (optional)
+
+---
+
+[← Back to Intro Course](../index.qmd)

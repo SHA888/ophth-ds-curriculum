@@ -1,0 +1,15 @@
+---
+title: Pitfalls — Image as ndarray
+---
+
+## BGR vs. RGB
+
+OpenCV defaults to BGR ordering. If you use `cv2.imread`, convert to RGB before further processing: `cv2.cvtColor(img, cv2.COLOR_BGR2RGB)`.
+
+## uint8 vs. float32
+
+Many OpenCV functions expect `uint8` [0–255]. If you convert to `float32` for calculations, remember to scale back to `uint8` before saving or displaying.
+
+## Normalization pitfalls
+
+Dividing by 255.0 yields floats in [0,1]. Do not mix normalized and unnormalized arrays without explicit conversion.

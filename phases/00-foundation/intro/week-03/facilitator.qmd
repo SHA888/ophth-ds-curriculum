@@ -1,0 +1,175 @@
+---
+title: "Week 3 — Facilitator Notes"
+subtitle: "R + Quarto Orientation"
+---
+
+## Learning Objectives
+
+Residents should leave able to create a Quarto document, write code chunks, render to HTML, and understand the relationship between source and output.
+
+---
+
+## Session Format
+
+| Segment | Duration | Activity |
+|---------|----------|----------|
+| Demo | 20 min | Live Quarto creation and rendering |
+| Guided | 25 min | Residents follow along |
+| Independent | 30 min | Complete the exercise document |
+| Git Integration | 15 min | Push to GitHub |
+
+---
+
+## Key Teaching Points
+
+### Quarto is Literate Programming
+
+Code and narrative in one place. This is the standard for reproducible research.
+
+### The YAML Header Matters
+
+Show what happens with bad YAML (indentation errors, missing quotes). Quarto fails fast with clear errors.
+
+### Chunk Options
+
+| Option | Effect |
+|--------|--------|
+| `echo: false` | Hide code, show output |
+| `eval: false` | Show code, don't run |
+| `warning: false` | Suppress package load warnings |
+
+Use `echo: false` for final reports; `echo: true` for teaching.
+
+---
+
+## Live Demo Script
+
+1. **File → New → Quarto Document**
+   - Title: "Demo"
+   - Author: Your name
+   - Format: HTML
+
+2. **Examine default template**
+   - YAML at top
+   - Text section
+   - Code chunk
+
+3. **Modify YAML**
+   ```yaml
+   ---
+   title: "Drug Calculator"
+   author: "Dr. Demo"
+   date: "2026-04-15"
+   ---
+   ```
+
+4. **Add content**
+   ```markdown
+   ## Patient Data
+   
+   Creating sample data:
+   
+   ```{r}
+   patients <- data.frame(
+     id = 1:3,
+     weight = c(70, 85, 60)
+   )
+   patients
+   ```
+   
+   ## Calculation
+   
+   Dose = weight × 2 mg/kg:
+   
+   ```{r}
+   patients$dose <- patients$weight * 2
+   patients
+   ```
+   ```
+
+5. **Render** (Ctrl+Shift+K)
+   - Show HTML opens automatically
+   - Point out `.qmd` vs `.html` files in folder
+
+6. **Inline code**
+   - Add: `Mean dose is `r mean(patients$dose)` mg.`
+   - Re-render, show inline result
+
+---
+
+## Common Confusion Points
+
+| Confusion | Clarification |
+|-----------|---------------|
+| "Why not just use Word?" | Reproducibility. Anyone can re-run your analysis. Version control tracks changes. |
+| "What's the difference between .qmd and .html?" | `.qmd` is source (you edit). `.html` is output (you share). |
+| "Do I commit the HTML?" | Generally no — it's generated. Commit `.qmd` only. |
+| "My chunk won't run" | Check backticks are plain ASCII, not smart quotes. |
+| YAML won't parse | Indentation is 2 spaces. No tabs. |
+
+---
+
+## Exercise Guidance
+
+**The exercise asks residents to:**
+1. Create a Quarto doc
+2. Load `tidyverse`
+3. Create patient data
+4. Calculate propofol dose
+5. Render and push
+
+**Watch for:**
+- `library(tidyverse)` failing → guide them to `install.packages("tidyverse")` first
+- Forgetting to save before rendering
+- Saving in weird locations (Desktop, Downloads)
+
+---
+
+## Troubleshooting
+
+| Problem | Solution |
+|---------|----------|
+| "Error in library(tidyverse)" | Run `install.packages("tidyverse")` |
+| Render fails, no helpful message | Check YAML indentation; check for smart quotes |
+| HTML doesn't open | Check if popup blocker is blocking |
+| Knit button missing | Ensure file is saved with `.qmd` extension |
+
+---
+
+## R Basics Sidebar
+
+If residents struggle with R syntax, use this mini-lesson:
+
+```r
+# Assignment
+x <- 5          # Arrow is preferred
+x = 5           # Works but less idiomatic
+
+# Vectors
+weights <- c(70, 85, 60)
+
+# Functions
+mean(weights)
+```
+
+Don't over-teach R now — Week 4 covers programming concepts in depth.
+
+---
+
+## Assessment
+
+Verify each resident can:
+
+- [ ] Create new Quarto document
+- [ ] Write text, code chunk, and inline code
+- [ ] Render without errors
+- [ ] Explain difference between source and output
+- [ ] Push `.qmd` to GitHub
+
+---
+
+## Preparation Checklist
+
+- [ ] RStudio with Quarto tested
+- [ ] Sample solution document prepared
+- [ ] Backup plan: RStudio Cloud accounts if local install fails

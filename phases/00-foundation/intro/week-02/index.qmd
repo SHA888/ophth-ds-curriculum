@@ -1,0 +1,150 @@
+---
+title: "Week 2 — Git and GitHub Fundamentals"
+---
+
+## Learning Objectives
+
+By the end of this session, you will be able to:
+
+- Explain what version control is and why it matters
+- Configure Git with your identity
+- Clone a repository from GitHub
+- Stage, commit, and push changes
+- Fork a repository and make a pull request
+
+## Why Version Control?
+
+Clinical data science is collaborative and iterative. Version control lets you:
+
+- Track every change to your analysis
+- Collaborate without overwriting each other's work
+- Revert mistakes instantly
+- Share your work with the world (or keep it private)
+
+## Core Concepts
+
+### Git vs GitHub
+
+- **Git** — Version control software (runs on your computer)
+- **GitHub** — Web platform for hosting Git repositories (cloud service)
+
+### The Git Workflow
+
+```
+Working Directory → Staging Area → Repository → GitHub
+        |                |              |           |
+      edit           git add        git commit   git push
+```
+
+## Setup
+
+### Configure Git Identity
+
+Tell Git who you are (one-time setup):
+
+```bash
+git config --global user.name "Your Name"
+git config --global user.email "your.email@hospital.id"
+```
+
+Verify:
+```bash
+git config --global user.name
+git config --global user.email
+```
+
+### Connect to GitHub
+
+Ensure your SSH key is set up (from Week 1 setup):
+
+```bash
+ssh -T git@github.com
+```
+
+You should see: "Hi username! You've successfully authenticated..."
+
+## Exercise
+
+### Part 1: Clone a Repository
+
+1. Navigate to your home directory: `cd ~`
+2. Create a folder for coursework: `mkdir mds-work` and enter it: `cd mds-work`
+3. Clone the curriculum repository:
+   ```bash
+   git clone git@github.com:balinesthesia/mds-curriculum.git
+   ```
+4. Navigate into it: `cd mds-curriculum`
+5. List files: `ls` — you should see `README.md`, `ARCHITECTURE.md`, etc.
+6. Check Git status: `git status` — should say "nothing to commit"
+
+### Part 2: Make Your First Contribution
+
+1. Fork the repository on GitHub (click "Fork" on the repo page)
+2. Clone your fork:
+   ```bash
+   cd ~
+   git clone git@github.com:YOUR-USERNAME/mds-curriculum.git my-fork
+   cd my-fork
+   ```
+3. Create a new branch: `git checkout -b my-first-edit`
+4. Open `README.md` and add your name to the bottom (as a comment: `<!-- Resident: Your Name -->`)
+5. Check status: `git status` — should show `README.md` as modified
+6. Stage the change: `git add README.md`
+7. Commit: `git commit -m "Add my name to README"`
+8. Push: `git push origin my-first-edit`
+9. Create a Pull Request on GitHub
+
+### Part 3: Understanding the Commands
+
+| Command | What it does |
+|---------|--------------|
+| `git status` | Shows what's changed |
+| `git add filename` | Stages a file for commit |
+| `git commit -m "message"` | Saves staged changes with a message |
+| `git push` | Sends commits to GitHub |
+| `git pull` | Downloads changes from GitHub |
+| `git log` | Shows commit history |
+
+## Key Principles
+
+### Commit Messages
+
+Good commit messages explain **why**, not just what:
+
+- ❌ "Update file"
+- ✅ "Fix dose calculation error in propofol analysis"
+
+### Atomic Commits
+
+Each commit should represent one logical change:
+
+- ❌ One commit with "Add data cleaning + fix typo + update README"
+- ✅ Three separate commits
+
+## Common Pitfalls
+
+| Problem | Solution |
+|---------|----------|
+| "Permission denied" on push | Check SSH key is added to ssh-agent |
+| "Merge conflict" | Edit the file to resolve markers, then commit |
+| Forgot to stage a file before committing | `git add filename` then `git commit --amend --no-edit` |
+| Pushed sensitive data | Immediately rotate credentials; don't just delete from Git (history remains) |
+
+## Verification
+
+Before leaving this session, confirm you can:
+
+- [ ] Configure Git with your name and email
+- [ ] Clone a repository from GitHub
+- [ ] Make an edit, stage, commit, and push
+- [ ] Create a pull request
+- [ ] Explain the difference between `git add`, `git commit`, and `git push`
+
+## Resources
+
+- [GitHub Git Cheat Sheet](https://education.github.com/git-cheat-sheet-education.pdf)
+- [Oh Shit, Git!?!](https://ohshitgit.com/) — Common mistake recovery
+
+---
+
+[← Back to Intro Course](../index.qmd)

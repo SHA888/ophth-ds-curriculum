@@ -1,0 +1,9 @@
+---
+title: File Formats
+---
+
+## Reading
+
+- **JPEG vs. TIFF vs. PNG** for fundus images: compression artifacts, bit depth, metadata.
+- **DICOM basics**: tags, transfer syntax, how to read with `pydicom`.
+- **OCT vendor formats**: Heidelberg `.e2e`, Topcon `.fda`, Zeiss `.img` — use `pydicom` or vendor SDKs where available.

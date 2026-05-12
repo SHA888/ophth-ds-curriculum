@@ -1,0 +1,9 @@
+---
+title: Color Spaces and Preprocessing
+---
+
+## Reading
+
+- RGB, HSV, LAB color spaces.
+- Why the green channel dominates in fundus images (hemoglobin absorption).
+- CLAHE (Contrast Limited Adaptive Histogram Equalization): motivation and parameters.

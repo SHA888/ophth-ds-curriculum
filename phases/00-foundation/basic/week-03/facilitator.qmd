@@ -1,0 +1,168 @@
+---
+title: "Week 3 — Facilitator Notes"
+subtitle: "Data Structures & Tidy Data"
+---
+
+## Learning Objectives
+
+Residents should understand how R stores data (vectors, data frames, lists) and why tidy data structure matters for clinical analysis. This is the first week where residents write code that manipulates actual data — the transition from "document structure" (Week 2) to "data structure."
+
+---
+
+## Session Format
+
+| Segment | Duration | Activity |
+|---------|----------|----------|
+| Recap | 5 min | Review Week 2 Quarto documents; check GitHub pushes |
+| Lecture | 20 min | Data structures; vectors → data frames; clinical analogy |
+| Live Demo | 20 min | Build messy → tidy dataset together; show why tidy wins |
+| Independent Exercise | 30 min | Parts 1–4: residents create, inspect, tidy data |
+| Group Share | 10 min | Part 4: compare messy → tidy descriptions |
+| Reflection | 10 min | Part 5: write and submit |
+| Check-in | 5 min | Preview Week 4 (clinical data types); verify GitHub push |
+
+---
+
+## Key Teaching Points
+
+### The Chart Analogy
+
+Frame the entire session around a clinical object residents know: the ICU flowsheet or anesthesia record.
+
+- A **vector** = one column of the flowsheet (all heart rates)
+- A **data frame** = the entire flowsheet at one timepoint
+- A **list** = the patient chart with sections
+- **Tidy data** = the flowsheet restructured so every row is one measurement at one time
+
+This grounds abstract CS concepts in daily clinical experience.
+
+### The "Mean of All HRs" Trap
+
+The exercise intentionally makes Part 2 (messy data) difficult. The goal is frustration. When residents struggle to compute `mean()` across `hr_t1` and `hr_t2`, the teachable moment arrives:
+
+> "The structure of your data determines the difficulty of your analysis. Bad structure makes simple questions complex."
+
+Do not rescue them early. Let them attempt `mean(c(vitals_messy$hr_t1, vitals_messy$hr_t2))` and then ask: "What if there were 20 timepoints? 100?"
+
+### Tidy Data as Prerequisite, Not Preference
+
+Some residents will say "but the wide format is more compact." Acknowledge this, then push back:
+
+> "Compact for your eyes, yes. But the computer does not read the way you do. The computer reads one cell at a time. Wide format forces you to write custom code for every question. Tidy format lets you reuse the same code for every question."
+
+This is the core argument of the week. It justifies every subsequent analysis week.
+
+### Base R vs. Tidyverse
+
+This module uses **base R** (`data.frame`, `read.csv`, `mean`, `max`) intentionally. Residents are not yet ready for the tidyverse pipe syntax (`|>`) or functions (`pivot_longer`). Those come in Week 5 (EDA I) after they are comfortable with data frame basics.
+
+The manual tidy transformation in Part 3 is tedious. That's the point. When they learn `pivot_longer()` later, the relief will be memorable and the conceptual foundation will be solid.
+
+### The Missing CSV File
+
+The exercise references `datasets/basic/messy-chart.csv`, which does not yet exist (dataset curation is scheduled for later). Provide two paths:
+
+1. **If file exists:** Residents load it directly.
+2. **If file does not exist:** Residents create the CSV from the provided template in Part 4.
+
+Both paths reach the same learning goal. The second path also reinforces file I/O skills from Intro Week 4.
+
+---
+
+## Live Demo Script
+
+**Build a messy dataset together:**
+
+```r
+# Start with what residents know: a patient table
+patients_wide <- data.frame(
+  id = c(101, 102),
+  sbp_t1 = c(120, 135),
+  sbp_t2 = c(118, 132),
+  dbp_t1 = c(80, 85),
+  dbp_t2 = c(78, 82)
+)
+```
+
+**Ask the room:** "How do I get the mean of all SBP readings?" (Both patients, both timepoints.)
+
+Let someone attempt. Usually: `mean(c(patients_wide$sbp_t1, patients_wide$sbp_t2))`. Ask: "What about 10 timepoints? What if we add MAP?"
+
+**Build the tidy version:**
+
+```r
+patients_long <- data.frame(
+  id = c(101, 101, 102, 102),
+  time = c(1, 2, 1, 2),
+  sbp = c(120, 118, 135, 132),
+  dbp = c(80, 78, 85, 82)
+)
+
+mean(patients_long$sbp)  # 121.25 — one line, any number of timepoints
+```
+
+**Key pause:** After the first `mean()`, ask: "What changed? Not the data — the structure."
+
+---
+
+## Exercise Guidance
+
+**Part 1:** Straightforward. Verify every resident can create a data frame and use `$`. Common failure: forgetting commas between vector elements.
+
+**Part 2:** The frustration point. Circulate and watch for the "mean of all HRs" struggle. Do not solve it for them. Ask: "Can you write a single command that works for 100 timepoints?"
+
+**Part 3:** Manual tidy creation is tedious. Some residents will try to automate with loops or `rep()`. Praise the instinct, then say: "We'll learn the automatic way next week. For now, manual builds intuition."
+
+**Part 4:** The CSV creation step tests whether residents can write a file, then load it, then analyze it. If the file already exists, this becomes a simple `read.csv` exercise. Either path is valid.
+
+**Part 5:** Reflection quality check. Look for:
+- Recognition that EMR exports are designed for display, not analysis
+- Understanding that tidy data is a prerequisite for correct statistics
+- Connection to Week 1: bad structure → irreproducible analysis
+
+---
+
+## Troubleshooting During Session
+
+| Problem | Quick Fix |
+|---------|-----------|
+| "Object not found" | Check spelling; check that the chunk with the object was executed |
+| `mean()` returns `NA` | Missing values in data; add `na.rm = TRUE` |
+| CSV won't load | Check file path with `getwd()`; check that file was saved |
+| "Unexpected ','" in `data.frame()` | Missing closing parenthesis on previous line |
+| Column names have spaces from CSV | Use backticks: `patients$`sbp preop`` or rename |
+| Tidy version has wrong number of rows | Double-check that every original cell has one row in tidy version |
+
+---
+
+## Assessment
+
+Verify each resident can:
+
+- [ ] Create a data frame with multiple columns
+- [ ] Access columns with `$` and compute statistics
+- [ ] Explain the three tidy data rules verbally
+- [ ] Identify violations in a given messy dataset
+- [ ] Create or describe the tidy equivalent
+- [ ] Push their Quarto document to GitHub
+
+If not, schedule 1-on-1. Data structures are foundational — Week 4 (data types) and Week 5 (EDA) depend on this.
+
+---
+
+## Preparation Checklist
+
+- [ ] Prepared messy → tidy demo on classroom machine
+- [ ] Verified `datasets/basic/messy-chart.csv` exists or printed CSV template for Part 4
+- [ ] Prepared "mean of all HRs" trap as teachable moment
+- [ ] Identified residents who struggled with R syntax in Intro Week 4
+- [ ] Tested base R commands on classroom R version
+
+---
+
+## Connection to Week 4
+
+Preview: Week 4 covers clinical data types (continuous, ordinal, nominal, time-to-event). The tidy dataset you built this week will be classified by type next week. Same data, new lens.
+
+End session with: "This week you learned how to structure data. Next week you learn how to classify it. Then you can analyze it."
+

@@ -1,0 +1,22 @@
+---
+title: Capstone — End-to-End Preprocessing Pipeline
+---
+
+## Specification
+
+Build a reproducible pipeline that takes a directory of raw fundus images (mixed JPEG/TIFF) and produces a standardized output:
+
+1. Load each image, convert to RGB if needed.
+2. Apply CLAHE (clipLimit=2.0, tileGridSize=(8,8)).
+3. Optionally convert to LAB and use L channel for further processing.
+4. Save the processed image as PNG in an output directory, preserving the base filename.
+
+The pipeline must be scripted (`pipeline.py`) and include a `README` explaining usage and dependencies.
+
+## Acceptance rubric
+
+- [ ] Script runs without errors on a test set of 10 images.
+- [ ] Output images are visually comparable (no color shifts, no artifacts).
+- [ ] All output files are PNG with consistent bit depth.
+- [ ] Pipeline logs each step (input filename, output filename, any warnings).
+- [ ] No PHI is included in the output (filenames only, no embedded metadata).

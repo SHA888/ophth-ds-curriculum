@@ -1,0 +1,133 @@
+---
+title: "Week 1 — Facilitator Notes"
+subtitle: "Command Line Basics"
+---
+
+## Learning Objectives
+
+Residents should leave able to navigate the file system, create/move files, and understand paths. This is foundational for all subsequent weeks.
+
+---
+
+## Session Format
+
+| Segment | Duration | Activity |
+|---------|----------|----------|
+| Demo | 15 min | Live navigation in terminal |
+| Guided Practice | 30 min | Residents follow along with facilitator |
+| Independent Exercise | 30 min | Residents complete file operations alone |
+| Check-in | 15 min | Verify completion, troubleshoot |
+
+---
+
+## Key Teaching Points
+
+### The Terminal is Just a File Explorer
+
+Reframe: "The terminal does the same thing as clicking folders — just with text commands."
+
+### Windows vs macOS/Linux
+
+- **Windows users:** Emphasize Git Bash (not CMD, not PowerShell). Git Bash commands match macOS/Linux.
+- **macOS/Linux users:** Terminal.app or any terminal works.
+
+### Common Confusion Points
+
+| Confusion | Clarification |
+|-----------|---------------|
+| "Where am I?" | `pwd` is your anchor. Check it constantly. |
+| Spaces in names | Explain quoting or escaping early. Show failure first. |
+| `cd` without arguments | On macOS/Linux, goes home. On Git Bash, also goes home. |
+| `/` vs `\` | macOS/Linux use `/`. Windows uses `\` natively but Git Bash accepts `/`. |
+
+---
+
+## Live Demo Script
+
+```bash
+# Show where we are
+pwd
+
+# List files
+ls
+
+# Make a test directory
+mkdir intro-demo
+cd intro-demo
+pwd  # Show the path changed
+
+# Create files
+touch file1.txt
+touch file2.txt
+ls
+
+# Move one file
+mv file1.txt subfolder/  # Error! subfolder doesn't exist
+
+mkdir subfolder
+mv file1.txt subfolder/
+ls subfolder/
+
+# Go up and back
+cd ..
+pwd
+cd intro-demo/subfolder
+pwd
+```
+
+---
+
+## Exercise Solutions
+
+**Part 1 Solution:**
+```bash
+pwd                              # /Users/resident (or similar)
+ls                               # see home folder contents
+cd ~                             # go to home (redundant if already there)
+pwd                              # /Users/resident
+```
+
+**Part 2 Solution:**
+```bash
+mkdir mds-intro
+cd mds-intro
+touch notes.txt                  # Windows: type nul > notes.txt
+ls                               # notes.txt
+mv notes.txt week1-notes.txt
+mkdir exercises
+mv week1-notes.txt exercises/
+cd exercises
+ls                               # week1-notes.txt
+```
+
+---
+
+## Troubleshooting During Session
+
+| Problem | Quick Fix |
+|---------|-----------|
+| Can't open Git Bash | Right-click in folder → "Git Bash Here" |
+| `touch` not found (Windows) | Use `type nul > filename.txt` instead |
+| "Permission denied" on `rm` | Try without sudo first; if system file, abort |
+| Lost in file system | `cd ~` to go home, start over |
+
+---
+
+## Assessment
+
+Verify each resident can:
+
+- [ ] Open terminal without facilitator assistance
+- [ ] Navigate to any directory using `cd`
+- [ ] Create a folder and a file
+- [ ] Explain `cd ..` vs `cd ~`
+
+If not, schedule 1-on-1 before Week 2.
+
+---
+
+## Preparation Checklist
+
+- [ ] Tested demo commands on Windows and macOS
+- [ ] Prepared troubleshooting handout
+- [ ] Identified resident likely to need extra support

@@ -1,0 +1,9 @@
+---
+title: Perimetry as Tabular Data
+---
+
+## Reading
+
+- **24-2 and 30-2 grid** — point locations, test pattern, blind spot mapping.
+- **Metrics**: MD (Mean Deviation), PSD (Pattern Standard Deviation), VFI (Visual Field Index).
+- **Interpretation**: global vs. localized defects, reliability indices.

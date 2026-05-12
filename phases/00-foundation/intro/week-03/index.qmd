@@ -1,0 +1,199 @@
+---
+title: "Week 3 — R + Quarto Orientation"
+---
+
+## Learning Objectives
+
+By the end of this session, you will be able to:
+
+- Open RStudio and navigate its interface
+- Create a new Quarto document
+- Write text, code chunks, and YAML metadata
+- Render a document to HTML
+- Push your rendered work to GitHub
+
+## Why R + Quarto?
+
+### R
+
+R is the lingua franca of clinical research. Most anesthesia papers you read were analyzed with R. Learning R means you can read and reproduce those papers.
+
+### Quarto
+
+Quarto is **literate programming** — code and prose in one document. It ensures:
+
+- Your analysis is reproducible (anyone can re-run it)
+- Your code is documented (explain what you're doing)
+- Your workflow is version controlled (Git tracks changes)
+
+## Core Concepts
+
+### The Quarto Document Structure
+
+````markdown
+---
+title: "My Analysis"
+author: "Your Name"
+date: "2026-04-15"
+---
+
+## Introduction
+
+This is **markdown** text.
+
+```r
+# This is an R code chunk
+mean(c(1, 2, 3, 4, 5))
+```
+
+## Results
+
+The mean is 3. *(In your document: use an inline R expression here)*
+````
+
+### Code Chunks
+
+Three backticks + `{r}` starts a code chunk. Three backticks ends it.
+
+| Chunk Option | Purpose |
+|--------------|---------|
+| `echo: true` | Show code in output (default) |
+| `echo: false` | Hide code, show output only |
+| `eval: true` | Run the code (default) |
+| `eval: false` | Don't run the code |
+| `warning: false` | Suppress warnings |
+
+## Exercise
+
+### Part 1: Create a Quarto Document
+
+1. Open RStudio
+2. File → New File → Quarto Document
+3. Title: "My First Analysis"
+4. Author: Your name
+5. Save as: `~/mds-work/week3-practice.qmd`
+
+### Part 2: Write Content
+
+Replace the template with (copy exactly, including the backticks that start/end code chunks):
+
+````markdown
+---
+title: "Drug Dose Calculator"
+author: "Your Name"
+date: "2026-04-15"
+---
+
+## Setup
+
+Load the packages we need:
+
+```r
+#| warning: false
+library(tidyverse)
+```
+
+## Data
+
+Create a simple dataset of patient weights:
+
+```r
+patients <- tibble(
+  id = 1:5,
+  weight_kg = c(70, 85, 60, 90, 75)
+)
+
+patients
+```
+
+## Calculation
+
+Calculate propofol induction dose (2 mg/kg):
+
+```r
+patients <- patients |>
+  mutate(propofol_mg = weight_kg * 2)
+
+patients
+```
+
+## Summary
+
+The mean propofol dose is 310 mg. *(In your document: use an inline R expression here)*
+````
+
+### Part 3: Render
+
+1. Click "Render" (or press Ctrl+Shift+K / Cmd+Shift+K)
+2. View the HTML output
+3. Notice how code, output, and text are interwoven
+
+### Part 4: Version Control
+
+Your `mds-work` folder should already have Git initialized from Week 2. If not:
+
+1. Initialize Git in your `mds-work` folder (skip if already done):
+   ```bash
+   cd ~/mds-work
+   git init
+   ```
+
+2. Add and commit your Week 3 file:
+   ```bash
+   git add week3-practice.qmd
+   git commit -m "Add Week 3 practice document"
+   ```
+
+3. Push to your personal GitHub repository (create one called `mds-work` if you haven't yet)
+
+## R Basics in 5 Minutes
+
+### Variables
+
+```r
+patient_weight <- 70  # Assign
+patient_weight        # Print
+```
+
+### Vectors
+
+```r
+weights <- c(70, 85, 60, 90, 75)
+mean(weights)
+sd(weights)
+```
+
+### Functions
+
+```r
+round(3.14159, 2)  # 3.14
+sqrt(16)           # 4
+```
+
+## Common Pitfalls
+
+| Problem | Solution |
+|---------|----------|
+| "Object not found" | Check spelling; ensure you ran the code chunk |
+| Chunk won't run | Check that backticks are correct (three, not fancy quotes) |
+| Package not found | Run `install.packages("packagename")` once |
+| Render fails | Check YAML indentation (spaces, not tabs) |
+
+## Verification
+
+Before leaving this session, confirm you can:
+
+- [ ] Create a new Quarto document in RStudio
+- [ ] Write text, code, and inline code
+- [ ] Render to HTML
+- [ ] Explain the difference between `.qmd` and `.html`
+- [ ] Push your work to GitHub
+
+## Resources
+
+- [Quarto Documentation](https://quarto.org/docs/guide/)
+- [R for Data Science](https://r4ds.had.co.nz/) — Free online textbook
+
+---
+
+[← Back to Intro Course](../index.qmd)

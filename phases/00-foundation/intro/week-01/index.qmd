@@ -1,0 +1,102 @@
+---
+title: "Week 1 — Command Line Basics"
+---
+
+## Learning Objectives
+
+By the end of this session, you will be able to:
+
+- Open a terminal (Terminal on macOS/Linux, Git Bash on Windows)
+- Navigate the file system using `cd`, `ls`/`dir`, and `pwd`
+- Create directories with `mkdir`
+- Create, move, and rename files
+- Understand absolute vs relative paths
+
+## Why the Command Line?
+
+The command line is the universal interface to your computer. Every tool we use — R, Python, Git, Quarto — can be controlled via the command line. Learning it early means you can troubleshoot any tool later.
+
+## Core Concepts
+
+### The Terminal
+
+The terminal is a text-based interface to your computer. You type commands; the computer responds.
+
+### File System Navigation
+
+| Command | Purpose | Example |
+|---------|---------|---------|
+| `pwd` | Print working directory (where am I?) | `pwd` |
+| `ls` | List files in current directory | `ls` or `ls -la` |
+| `cd` | Change directory | `cd Documents` |
+| `cd ..` | Go up one directory | `cd ..` |
+| `cd ~` | Go to home directory | `cd ~` |
+
+### File Operations
+
+| Command | Purpose | Example |
+|---------|---------|---------|
+| `mkdir` | Make directory | `mkdir my-project` |
+| `touch` | Create empty file | `touch notes.txt` |
+| `mv` | Move or rename | `mv old.txt new.txt` |
+| `cp` | Copy | `cp file.txt backup.txt` |
+| `rm` | Remove file | `rm file.txt` |
+| `rm -r` | Remove directory | `rm -r my-folder` |
+
+## Exercise
+
+### Part 1: Navigation
+
+1. Open your terminal
+2. Type `pwd` — note the full path
+3. Type `ls` — see what files/folders are here
+4. Type `cd ~` — go to home directory
+5. Type `pwd` again — confirm you're at home
+
+### Part 2: File Operations
+
+1. Create a directory: `mkdir mds-intro`
+2. Enter it: `cd mds-intro`
+3. Create a file: `touch notes.txt` (macOS/Linux) or `type nul > notes.txt` (Windows)
+4. List it: `ls` — should see `notes.txt`
+5. Rename it: `mv notes.txt week1-notes.txt`
+6. Create a subdirectory: `mkdir exercises`
+7. Move the file into it: `mv week1-notes.txt exercises/`
+8. Navigate in: `cd exercises`
+9. List: `ls` — should see your file
+
+### Part 3: Relative vs Absolute Paths
+
+From `~/mds-intro/exercises/`, try:
+
+- `pwd` — shows absolute path
+- `cd ..` — goes up to `mds-intro`
+- `cd ../..` — goes up two levels
+- `cd ~/mds-intro/exercises` — absolute path back
+
+## Common Pitfalls
+
+| Problem | Cause | Solution |
+|---------|-------|----------|
+| "Command not found" | Typo or not in PATH | Check spelling; ensure tool is installed |
+| "No such file" | Wrong path | Use `pwd` to see where you are; use `ls` to see files |
+| Spaces in names | Unescaped spaces | Quote paths: `cd "My Folder"` or escape: `cd My\ Folder` |
+
+## Verification
+
+Before leaving this session, confirm you can:
+
+- [ ] Open terminal independently
+- [ ] Navigate to any directory using `cd`
+- [ ] Create a folder and a file
+- [ ] Move and rename files
+- [ ] Explain the difference between `cd ..` and `cd ~`
+
+## Resources
+
+- **macOS/Linux:** [Command Line Crash Course](https://learnpythonthehardway.org/book/appendix-a-cli/ex1.html)
+- **Windows:** [Git Bash commands](https://git-scm.com/docs/git-bash)
+
+---
+
+[← Back to Intro Course](../index.qmd)

@@ -1,0 +1,18 @@
+---
+title: Exercise — Implement and Compare CLAHE
+---
+
+## Objective
+
+Implement CLAHE manually (using `cv2.createCLAHE` or from scratch) and compare with OpenCV's built‑in implementation.
+
+## Steps
+
+1. Load a fundus image (grayscale or green channel).
+2. Apply manual CLAHE: divide image into tiles, compute local histograms, clip, redistribute.
+3. Apply `cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))`.
+4. Display side‑by‑side and compute MSE between the two results (should be near zero if implemented correctly).
+
+## Deliverable
+
+Notebook `clahe_comparison.ipynb` or script `clahe_compare.py`.

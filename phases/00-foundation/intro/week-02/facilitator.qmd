@@ -1,0 +1,161 @@
+---
+title: "Week 2 — Facilitator Notes"
+subtitle: "Git and GitHub Fundamentals"
+---
+
+## Learning Objectives
+
+Residents should leave able to clone, edit, commit, and push. They should understand the difference between Git (local) and GitHub (remote).
+
+---
+
+## Session Format
+
+| Segment | Duration | Activity |
+|---------|----------|----------|
+| Concept | 15 min | Why version control matters |
+| Setup | 15 min | Configure Git identity, verify SSH |
+| Demo | 20 min | Clone, edit, commit, push |
+| Exercise | 40 min | Fork, edit, pull request |
+
+---
+
+## Key Teaching Points
+
+### Analogy: Save States in a Game
+
+Git commits are like save states. You can always go back. GitHub is cloud backup of your saves.
+
+### The Git Workflow (Visual)
+
+Draw on whiteboard:
+
+```
+Working Directory
+      ↓ git add
+Staging Area (index)
+      ↓ git commit
+Local Repository
+      ↓ git push
+GitHub (remote)
+```
+
+### Why SSH vs HTTPS
+
+- SSH: No password typing after initial setup. Required for this curriculum.
+- HTTPS: Password every time (or personal access token).
+
+If resident hasn't set up SSH from Week 1 setup guide, walk them through it now.
+
+---
+
+## Common Confusion Points
+
+| Confusion | Clarification |
+|-----------|---------------|
+| "What's the difference between Git and GitHub?" | Git is the tool on your computer. GitHub is the website hosting your code. |
+| "Why do I need to `add` then `commit`?" | Adding stages changes; commit saves them. Like reviewing photos before saving album. |
+| "I committed but don't see it on GitHub" | You need `git push` to send to GitHub. |
+| "What's a fork?" | Your personal copy of a repo. Changes to your fork don't affect original until pull request. |
+
+---
+
+## Live Demo Script
+
+```bash
+# Check identity
+git config --global user.name
+git config --global user.email
+
+# Check SSH
+ssh -T git@github.com
+
+# Clone (use your own demo repo)
+cd ~
+mkdir git-demo
+cd git-demo
+git clone git@github.com:balinesthesia/mds-curriculum.git
+cd mds-curriculum
+
+# Show status
+git status  # "nothing to commit, working tree clean"
+
+# Make a change
+echo "# Demo edit" >> README.md
+git status  # shows modified
+
+# Stage and commit
+git add README.md
+git status  # shows staged
+git commit -m "Demo: add header to README"
+git log --oneline -3
+
+# Don't actually push in demo — residents do this in exercise
+```
+
+---
+
+## Exercise Walkthrough
+
+**Fork and PR exercise:**
+
+1. **Fork:** Show on GitHub UI. Point out "forked from balinesthesia/mds-curriculum" at top.
+
+2. **Clone their fork:** 
+   ```bash
+   git clone git@github.com:USERNAME/mds-curriculum.git my-fork
+   cd my-fork
+   ```
+
+3. **Branch:** Explain branches as parallel universes.
+   ```bash
+   git checkout -b my-first-edit
+   ```
+
+4. **Edit:** Open README.md, add comment with name.
+
+5. **Commit:** Standard add/commit.
+
+6. **Push:** 
+   ```bash
+   git push origin my-first-edit
+   ```
+
+7. **Pull Request:** Show GitHub UI. "Compare & pull request" button appears.
+
+**Common failure:** Pushing to `origin` when they should push to their fork. Check remote:
+```bash
+git remote -v
+```
+Should show `git@github.com:USERNAME/...` not `git@github.com:balinesthesia/...`
+
+---
+
+## Troubleshooting
+
+| Problem | Solution |
+|---------|----------|
+| "Permission denied (publickey)" | SSH key not added. Run `ssh-add ~/.ssh/id_ed25519` |
+| "fatal: not a git repository" | Not in a git folder. Check `pwd` |
+| "Merge conflict" (rare in intro) | Abort: `git merge --abort`; redo carefully |
+| Pushed to wrong repo | Show how to check remotes; re-clone if needed |
+
+---
+
+## Assessment
+
+Verify each resident can:
+
+- [ ] Configure Git identity
+- [ ] Clone their fork of mds-curriculum
+- [ ] Make an edit, commit, and push
+- [ ] Create a pull request
+
+---
+
+## Preparation Checklist
+
+- [ ] Created demo fork for live demo
+- [ ] Prepared SSH troubleshooting handout
+- [ ] Identified residents who missed Week 1 setup
+- [ ] Ready to pair-program with struggling residents

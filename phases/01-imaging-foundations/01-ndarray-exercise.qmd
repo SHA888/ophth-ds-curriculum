@@ -1,0 +1,18 @@
+---
+title: Exercise — Load and Inspect a Fundus Image
+---
+
+## Objective
+
+Load a JPEG fundus image, inspect its shape and dtype, and perform a round‑trip save.
+
+## Steps
+
+1. Use `imageio.imread` or `PIL.Image.open` to load `sample-fundus.jpg`.
+2. Print `array.shape` and `array.dtype`.
+3. Save the array back to PNG using `imageio.imwrite`.
+4. Reload the PNG and confirm the shape/dtype are unchanged.
+
+## Deliverable
+
+A short script (`exercise_ndarray.py`) that performs the above and prints the values.

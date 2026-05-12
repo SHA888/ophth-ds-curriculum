@@ -1,0 +1,211 @@
+---
+title: "Week 4 — Facilitator Notes"
+subtitle: "Programming Concepts + Statistics Refresher"
+---
+
+## Learning Objectives
+
+Residents should leave able to write functions, read/write CSV, compute statistics, and understand distributions conceptually. This bridges to Basic tier.
+
+---
+
+## Session Format
+
+| Segment | Duration | Activity |
+|---------|----------|----------|
+| Concept | 20 min | Variables, types, functions |
+| Demo | 20 min | Read CSV, calculate statistics |
+| Exercise | 50 min | Complete analysis pipeline |
+| Wrap | 10 min | Preview Basic tier |
+
+---
+
+## Key Teaching Points
+
+### Variables are Labels
+
+Not boxes. `x <- 5` says "x refers to 5". This matters for understanding data frames.
+
+### Functions are Recipes
+
+Input → Process → Output. Show body of a simple function.
+
+### File Paths are Hard
+
+This is where residents get lost. Emphasize:
+- Use `getwd()` to know where R is looking
+- Use full paths (`~/mds-work/`) or project-relative paths
+- Check file exists before reading: `file.exists("data.csv")`
+
+### Statistics Refresher: Conceptual Only
+
+No p-value calculations. Focus on:
+- Mean vs median (when outliers matter)
+- SD as "typical spread"
+- Distribution shapes (normal vs skewed)
+- p-value as "surprisingness under null" (not as probability hypothesis is true)
+
+---
+
+## Live Demo Script
+
+### Part 1: Data Types
+
+```r
+# Numeric
+weight <- 70.5
+class(weight)
+
+# Character
+diagnosis <- "Sepsis"
+class(diagnosis)
+
+# Logical
+critical <- TRUE
+class(critical)
+
+# Vector (one type only)
+ages <- c(45, 62, 33, 58)
+mean(ages)
+```
+
+### Part 2: Data Frame
+
+```r
+patients <- data.frame(
+  id = 1:4,
+  age = c(45, 62, 33, 58),
+  sex = c("M", "F", "F", "M")
+)
+str(patients)
+patients$age
+```
+
+### Part 3: Function
+
+```r
+calculate_bmi <- function(weight_kg, height_m) {
+  bmi <- weight_kg / (height_m ^ 2)
+  return(bmi)
+}
+
+calculate_bmi(70, 1.75)
+```
+
+### Part 4: File I/O
+
+Create `demo.csv` live in RStudio editor:
+```csv
+id,age,sbp
+1,45,120
+2,62,135
+3,33,110
+```
+
+Then:
+```r
+library(readr)
+data <- read_csv("demo.csv")
+summary(data)
+write_csv(data, "output.csv")
+```
+
+---
+
+## Statistics Refresher Talking Points
+
+### Mean vs Median
+
+Use income analogy:
+- Mean income: pulled up by billionaires
+- Median income: what typical person earns
+
+Clinical: ICU LOS. Mean is inflated by long stays. Median is more representative.
+
+### p-values
+
+**Correct:** "If the drug had no effect, we'd see results this extreme 3% of the time."
+
+**Wrong:** "There's a 97% probability the drug works."
+
+Emphasize: p-value doesn't measure effect size or clinical importance.
+
+### Distributions
+
+- Normal: symmetric, bell-shaped (heights)
+- Skewed right: tail to right (ICU LOS, hospital charges)
+- Bimodal: two groups mixed together (consider stratifying)
+
+---
+
+## Exercise Guidance
+
+**The CSV creation step is critical.** If residents struggle:
+
+1. Show them RStudio's "New File" → "Text File"
+2. Type data with commas
+3. File → Save As → `patients.csv`
+4. Put in `~/mds-work/`
+
+**Common errors:**
+- Saving as `.txt` not `.csv`
+- Using semicolons instead of commas (locale issue)
+- Extra blank lines at end
+
+**The mutate/case_when logic:**
+Walk through this slowly. `case_when` is the first "programming-like" code they've seen.
+
+---
+
+## Troubleshooting
+
+| Problem | Solution |
+|---------|----------|
+| "File not found" | `getwd()` then `setwd("~/mds-work")` |
+| `read_csv` not found | Forgot `library(readr)` or `library(tidyverse)` |
+| NA in calculations | `na.rm = TRUE`: `mean(x, na.rm = TRUE)` |
+| Factors vs characters | Use `read_csv()` (returns characters) not `read.csv()` (returns factors) |
+| BMI calculation wrong | Check units: height must be in meters, not cm |
+
+---
+
+## Transition to Basic Tier
+
+End with preview:
+
+> "Next tier: Basic. We stop learning tools and start doing analysis. Week 1 of Basic: you'll reproduce a published anesthesia paper."
+
+Show the progression:
+- Intro: Learn the bicycle
+- Basic: Ride on flat ground
+- Intermediate: Ride on roads with traffic
+- Advanced: Build new bicycles
+
+---
+
+## Assessment
+
+Verify each resident can:
+
+- [ ] Create a data frame with multiple variable types
+- [ ] Write a function with two arguments
+- [ ] Read CSV and inspect with `str()` or `summary()`
+- [ ] Calculate mean, median, SD
+- [ ] Use `mutate` to add a calculated column
+- [ ] Save results to CSV
+- [ ] Explain when median beats mean
+
+---
+
+## Preparation Checklist
+
+- [ ] Demo CSV file prepared
+- [ ] Solution script ready for struggling residents
+- [ ] Week 1 Basic preview slides (optional)
+- [ ] List of residents needing 1-on-1 follow-up
+
+---
+
+## Post-Session
+
+After Week 4, complete `intro-verification-checklist.qmd` for each resident before declaring cohort ready for Basic tier.

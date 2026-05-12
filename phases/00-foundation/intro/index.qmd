@@ -1,0 +1,53 @@
+# Introductory Course
+
+**Duration:** 4 weeks  
+**Goal:** Zero-assumption entry path — establish shared toolchain competence before Basic tier content begins
+
+---
+
+## Overview
+
+Residents arrive with clinical intelligence but no programming or statistics background. The Introductory Course separates tool learning from concept learning. Without this foundation, Week 1 of Basic would require simultaneous learning of tools and concepts — a proven failure mode.
+
+## Learning Goals
+
+By the end of this course, residents will:
+
+1. Navigate the command line confidently (terminal, file system, paths)
+2. Use Git and GitHub for version control (clone, commit, push, fork)
+3. Render a Quarto document with R code chunks
+4. Understand core programming concepts (variables, data types, functions)
+5. Refresh basic statistics intuition (mean, median, variance, distributions, p-values)
+
+## Structure
+
+Each week follows the pattern:
+```
+week-NN/
+├── index.qmd          # Resident-facing module
+├── facilitator.qmd    # Facilitator notes
+└── data/              # Module dataset (if any)
+```
+
+## Week Overview
+
+| Week | Topic | Key Skills |
+|------|-------|------------|
+| 1 | Command line basics | Terminal navigation, file operations |
+| 2 | Git and GitHub | Version control, repository workflow |
+| 3 | R + Quarto orientation | Literate programming, document rendering |
+| 4 | Programming + Statistics | Variables, functions, summary statistics |
+
+## Capstone
+
+No formal capstone. Completion verified via `facilitator/intro-verification-checklist.qmd`.
+
+## Prerequisites
+
+- Clinical intelligence (you have this)
+- No programming or statistics background assumed
+- Personal laptop (Windows, macOS, or Linux)
+
+---
+
+*See main [README.md](../index.qmd) for full curriculum overview.*

@@ -1,0 +1,312 @@
+---
+title: "Week 4 — Clinical Data Types"
+---
+
+## Learning Objectives
+
+By the end of this session, you will be able to:
+
+- Define continuous, ordinal, nominal, and time-to-event data types
+- Classify clinical variables by their appropriate data type
+- Explain why data type determines the correct statistical analysis
+- Create and use factors in R for categorical data
+- Identify when a number is actually a category (and vice versa)
+- Choose appropriate summary statistics for each data type
+
+## Why Data Types Matter
+
+In Week 3, you learned to structure data. This week you learn to **classify** it. The same tidy table can lead to completely wrong conclusions if you analyze a categorical variable as continuous, or a continuous variable as categorical.
+
+**The data type determines:**
+- Which summary statistics are valid (mean vs. median vs. mode)
+- Which statistical tests apply (t-test vs. chi-square vs. Kaplan-Meier)
+- Which visualizations make sense (histogram vs. bar chart vs. survival curve)
+
+Misclassification is a common source of clinical research errors. This week builds the defense.
+
+## Core Concepts
+
+### Continuous Data
+
+**Definition:** Numeric values where differences are meaningful and ratios may be meaningful. Can (in theory) take any value in a range.
+
+**Clinical examples:**
+- Mean arterial pressure (MAP) — 65, 72, 68, 75 mmHg
+- Heart rate — 72, 85, 90 bpm
+- Temperature — 36.5, 37.2, 38.0 °C
+- Lab values — creatinine 1.2, 1.5, 2.0 mg/dL
+
+**R type:** `numeric` (double or integer)
+
+**Appropriate summaries:** Mean, standard deviation, median, IQR, range
+
+**Inappropriate summaries:** Mode (usually), frequency table
+
+```r
+# Continuous variable
+map <- c(65, 72, 68, 75, 82, 70, 68, 74)
+mean(map)
+sd(map)
+median(map)
+```
+
+### Ordinal Data
+
+**Definition:** Categorical with a clear order, but differences between values are not necessarily equal or meaningful.
+
+**Clinical examples:**
+- ASA physical status — I, II, III, IV, V, VI (VI = declared brain dead for organ donation)
+- NYHA heart failure class — I, II, III, IV
+- Pain score — 0, 1, 2, ..., 10
+- GCS motor response — 1 (none) to 6 (obeys commands)
+
+**R type:** `ordered factor`
+
+**Key insight:** The difference between ASA I and II is not the same as between ASA IV and V. You cannot say "ASA IV is twice as sick as ASA II."
+
+**Appropriate summaries:** Median, mode, frequency table, proportion in each category
+
+**Inappropriate summaries:** Mean (mathematically possible but clinically meaningless)
+
+```r
+# Ordinal variable — ASA class
+asa <- ordered(c("II", "III", "II", "IV", "III", "II"), 
+               levels = c("I", "II", "III", "IV", "V", "VI"))
+table(asa)
+names(which.max(table(asa)))  # Returns the most frequent category ("II")
+# Note: base R median() does not support factors — use table() for ordinal summaries
+```
+
+### Nominal Data
+
+**Definition:** Categories without any natural order.
+
+**Clinical examples:**
+- Sex — male, female
+- Blood type — A, B, AB, O
+- Diagnosis code — appendicitis, cholecystitis, trauma
+- Anesthetic technique — general, spinal, epidural, local
+- Hospital site — Site A, Site B, Site C
+
+**R type:** `factor` (unordered) or `character`
+
+**Critical trap:** Numbers assigned to categories (1 = male, 2 = female) are **not numeric.** Computing a mean sex of 1.4 is nonsense.
+
+**Appropriate summaries:** Frequency table, mode, proportions
+
+**Inappropriate summaries:** Mean, median, standard deviation, min, max
+
+```r
+# Nominal variable — Sex
+sex <- factor(c("male", "female", "female", "male", "male"))
+table(sex)
+prop.table(table(sex))
+```
+
+### Time-to-Event Data (Survival Data)
+
+**Definition:** Time from a defined start point until an event occurs — **with censoring.**
+
+**Clinical examples:**
+- Time from ICU admission to death or discharge
+- Time from surgery to first postoperative complication
+- Time from intubation to extubation
+
+**The censoring problem:** At time of analysis, some patients have not yet had the event (still in ICU, still alive). Their time is **censored** — we know they survived at least 5 days, but not their final time.
+
+**R type:** Requires two variables:
+- `time` — time observed
+- `status` — 1 = event occurred, 0 = censored
+
+**Why special handling:** Simply excluding censored patients biases results (only counting patients who had the event quickly). Simply using the observed time underestimates true time-to-event.
+
+**Appropriate analysis:** Kaplan-Meier curves, Cox regression, log-rank test
+
+**Inappropriate analysis:** t-test on observed times, mean time-to-event
+
+```r
+# Time-to-event data structure (not analysis — that comes in Week 13)
+icu_time <- data.frame(
+  patient_id = c(101, 102, 103, 104),
+  days_in_icu = c(5, 12, 8, 3),
+  died_in_icu = c(0, 1, 0, 1)  # 0 = censored (discharged alive), 1 = event (died)
+)
+# Patient 101 and 103 are censored — we know they survived ICU, 
+# but not their total survival time
+```
+
+## Factors in R
+
+Factors are R's way of storing categorical data. They look like text but store numbers internally.
+
+### Creating Factors
+
+```r
+# Nominal factor
+sex <- factor(c("male", "female", "female", "male"))
+
+# Ordinal factor (explicit order)
+asa <- ordered(c("II", "III", "II", "IV"), 
+               levels = c("I", "II", "III", "IV", "V"))
+
+# Check the levels
+levels(sex)
+levels(asa)
+```
+
+### Common Factor Traps
+
+**Trap 1: Character vectors that look like numbers**
+
+```r
+# Excel export problem
+patient_ids <- c("101", "102", "103")  # Character!
+patient_ids_numeric <- as.numeric(patient_ids)  # Convert if needed
+```
+
+**Trap 2: Numeric codes without labels**
+
+```r
+# Bad: What does 2 mean?
+sex_numeric <- c(1, 2, 2, 1)  # 1 = male? 2 = female?
+
+# Good: Explicit factor
+sex_factor <- factor(c("male", "female", "female", "male"))
+```
+
+**Trap 3: Factors that are secretly ordered**
+
+```r
+# Wrong — treated as nominal (R assigns alphabetical level order: 0,2,3,5,8)
+pain_wrong <- factor(c(0, 2, 5, 3, 8))
+
+# Right — treated as ordinal (levels = 0:10 specifies full ordered scale 0-10)
+# Note: both values and levels are coerced to character internally by ordered()
+pain_right <- ordered(c(0, 2, 5, 3, 8), levels = 0:10)
+```
+
+## Exercise
+
+### Part 1: Classify Clinical Variables
+
+For each variable below, identify:
+1. Data type (continuous, ordinal, nominal, time-to-event)
+2. Appropriate R storage type (numeric, factor, ordered, or two-column structure)
+3. One appropriate summary statistic
+4. One inappropriate summary statistic (that would be wrong to use)
+
+| Variable | Type | R Type | Appropriate | Inappropriate |
+|----------|------|--------|-------------|---------------|
+| Heart rate (bpm) | ? | ? | ? | ? |
+| ASA class (I-VI) | ? | ? | ? | ? |
+| Blood type (A/B/AB/O) | ? | ? | ? | ? |
+| ICU length of stay (days, with some patients still in ICU) | ? | ? | ? | ? |
+| GCS total score (3-15) | ? | ? | ? | ? |
+| GCS motor component (1-6) | ? | ? | ? | ? |
+| Propofol dose (mg) | ? | ? | ? | ? |
+| Mechanical ventilation (yes/no) | ? | ? | ? | ? |
+
+Fill in the table in your Quarto document with explanations.
+
+### Part 2: Create Factors in R
+
+Create the following variables in R, ensuring correct types:
+
+```r
+# 1. ASA classes for 6 patients: II, III, II, IV, III, II
+asa <- ordered(c("II", "III", "II", "IV", "III", "II"), 
+               levels = c("I", "II", "III", "IV", "V", "VI"))
+
+# 2. Sex for the same 6 patients: male, female, female, male, male, female
+sex <- factor(c("male", "female", "female", "male", "male", "female"))
+
+# 3. MAP readings (continuous): 72, 68, 75, 82, 70, 68
+map <- c(72, 68, 75, 82, 70, 68)
+
+# Verify with str() — "structure" function
+str(asa)
+str(sex)
+str(map)
+```
+
+### Part 3: SOFA Score Component Classification
+
+The SOFA (Sequential Organ Failure Assessment) score has 6 components. Each is scored 0-4, but the inputs come from different data types.
+
+**Component details:**
+
+| Component | Input Variable | SOFA Score |
+|-----------|---------------|------------|
+| Respiratory | PaO2/FiO2 ratio (mmHg) | 0: ≥400, 1: <400, 2: <300, 3: <200, 4: <100 |
+| Coagulation | Platelet count (×10³/μL) | 0: ≥150, 1: <150, 2: <100, 3: <50, 4: <20 |
+| Liver | Bilirubin (mg/dL) | 0: <1.2, 1: 1.2-1.9, 2: 2.0-5.9, 3: 6.0-11.9, 4: ≥12 |
+| Cardiovascular | MAP (mmHg) or vasopressor use | 0: MAP ≥70, 1: MAP <70, 2-4: dopamine/norepinephrine doses |
+| Neurological | GCS score | 0: 15, 1: 13-14, 2: 10-12, 3: 6-9, 4: <6 |
+| Renal | Creatinine (mg/dL) or urine output | 0: <1.2, 1: 1.2-1.9, 2: 2.0-3.4, 3: 3.5-4.9, 4: ≥5 |
+
+**Your task:**
+
+For the **input variables** (PaO2/FiO2, platelets, bilirubin, MAP, GCS, creatinine), classify each:
+1. Continuous, ordinal, or nominal?
+2. What R type should store the raw measurement?
+3. Why is the conversion to SOFA 0-4 score a **lossy transformation**? (What information is lost?)
+4. The SOFA 0-4 score itself — is this ordinal or interval? Can you say "SOFA 3 is three times worse than SOFA 1"?
+
+Write your answers in a Quarto document with justification for each.
+
+### Part 4: Common Errors in Published Papers
+
+Below are real (anonymized) errors from published anesthesia papers. Identify the data type error:
+
+**Error A:** "The mean ASA class was 2.4 (SD 0.8)"
+
+**Error B:** "We compared time to extubation between groups using a t-test"
+
+**Error C:** "Sex was coded as 1 = male, 2 = female, and entered as a continuous predictor in the regression"
+
+**Error D:** "The average pain score decreased from 8.2 to 4.1, a 50% reduction"
+
+For each:
+1. What is wrong?
+2. What should have been done instead?
+3. What is the clinical consequence of the error?
+
+### Part 5: Reflection
+
+Write 2–3 sentences:
+
+> Why does data type classification matter more in clinical research than in many other fields? Hint: think about composite scores, time-to-event outcomes, and the difference between "counting" and "measuring."
+
+---
+
+## Common Pitfalls
+
+| Pitfall | Why It Happens | How to Prevent |
+|---------|----------------|----------------|
+| "I computed the mean of my ordinal pain scores" | Pain scores are numbers, so mean seems natural | Remember: 8/10 pain is not "twice" 4/10 pain. Report median and IQR. |
+| "My categorical variable has numbers, so I treated it as continuous" | Numeric codes look numeric | Use `factor()` or `ordered()` explicitly. Check with `str()`. |
+| "I excluded patients still in the ICU from my length-of-stay analysis" | Censored data feels incomplete | Time-to-event requires survival analysis. Exclusion biases toward sicker patients. |
+| "My factor levels are in alphabetical order, not clinical order" | R defaults to alphabetical | Use `levels = c(...)` to specify order explicitly. |
+| "I reported mean ± SD for GCS" | GCS is numeric 3-15 | GCS is ordinal. A mean GCS of 10.5 is clinically meaningless. Report median or proportions in each category. |
+
+## Verification
+
+Before leaving this session, confirm you can:
+
+- [ ] Identify continuous, ordinal, nominal, and time-to-event data in clinical context
+- [ ] Explain why data type determines appropriate statistical analysis
+- [ ] Create factors and ordered factors in R
+- [ ] Classify SOFA components correctly and explain why the conversion is lossy
+- [ ] Identify statistical errors in published papers related to data type misclassification
+- [ ] Push your Quarto document to GitHub
+
+## Resources
+
+- **R for Data Science (2e):** [r4ds.hadley.nz/factors.html](https://r4ds.hadley.nz/factors.html) — Factors chapter
+- **SOFA Score:** Vincent, et al. (1996). "The SOFA score to describe organ dysfunction/failure." *Intensive Care Medicine*
+- **ASA Physical Status:** [ASA House of Delegates, 2020](https://www.asahq.org/standards-and-practice-parameters/statement-on-asa-physical-status-classification-system)
+- **Survival Analysis in R:** [CRAN Task View: Survival Analysis](https://cran.r-project.org/web/views/Survival.html) — For Week 13 prep
+
+---
+
+[← Back to Basic Tier](../index.qmd)

@@ -1,0 +1,18 @@
+---
+title: Exercise — Open Vendor OCT Formats
+---
+
+## Objective
+
+Open one sample from each of the major OCT vendor formats using public‑domain tools.
+
+## Steps
+
+1. Obtain sample files (Heidelberg `.e2e`, Topcon `.fda`, Zeiss `.img`) from public datasets or your institution (ensure license allows use).
+2. Use `pydicom` to read DICOM tags and pixel data.
+3. For non‑DICOM formats, use appropriate libraries (e.g., `tifffile` for some TIFF‑based OCT) or vendor SDKs if available.
+4. Print key metadata (modality, bits stored, rows/columns) and display a B‑scan.
+
+## Deliverable
+
+A notebook `open_oct_formats.ipynb` with code and screenshots.
