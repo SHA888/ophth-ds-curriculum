@@ -18,6 +18,7 @@ on:
       - "phases/04-*.qmd"
       - "phases/05-*.qmd"
       - "_quarto.yml"
+  workflow_call:
 
 jobs:
   render:

@@ -1,0 +1,17 @@
+name: CI (meta)
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  call-lint:
+    uses: ./.github/workflows/markdownlint.yml
+  call-links:
+    uses: ./.github/workflows/lychee.yml
+  call-secrets:
+    uses: ./.github/workflows/gitleaks.yml
+  call-render:
+    uses: ./.github/workflows/quarto.yml

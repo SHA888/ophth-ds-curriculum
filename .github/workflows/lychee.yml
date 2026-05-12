@@ -2,12 +2,13 @@ name: Link Check (Lychee)
 
 on:
   schedule:
-    - cron: '0 0 * * 0'   # weekly
+    - cron: "0 0 * * 0" # weekly
   pull_request:
     paths:
-      - '**/*.md'
-      - '**/*.qmd'
-      - '**/*.Rmd'
+      - "**/*.md"
+      - "**/*.qmd"
+      - "**/*.Rmd"
+  workflow_call:
 
 jobs:
   lychee:
