@@ -3,17 +3,14 @@ name: Secret Scan (gitleaks)
 on:
   pull_request:
     paths:
-      - '**/*'
+      - "**/*"
 
 jobs:
   gitleaks:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - name: Install gitleaks
-        run: |
-          curl -sSfL https://github.com/gitleaks/gitleaks/releases/download/v8.18.2/gitleaks-linux-amd64 -o gitleaks
-          chmod +x gitleaks
-          sudo mv gitleaks /usr/local/bin/gitleaks
       - name: Run gitleaks
-        run: gitleaks detect --source . --redact --no-git --report-path gitleaks-report.json
+        uses: gitleaks/gitleaks-action@v2
+        with:
+          args: --report-format json --report-path gitleaks-report.json --redact
