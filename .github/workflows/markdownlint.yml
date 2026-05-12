@@ -28,4 +28,8 @@ jobs:
               files="$files $d/**"
             fi
           done
-          markdownlint-cli2 $files
+          if [ -n "$files" ]; then
+            markdownlint-cli2 $files
+          else
+            echo "No markdown files to lint"
+          fi

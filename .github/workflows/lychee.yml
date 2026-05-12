@@ -28,4 +28,8 @@ jobs:
               files="$files $d/**"
             fi
           done
-          lychee $files --verbose --no-progress
+          if [ -n "$files" ]; then
+            lychee $files --verbose --no-progress
+          else
+            echo "No markdown files to check"
+          fi
