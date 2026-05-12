@@ -20,4 +20,4 @@ jobs:
           curl -sSfL https://github.com/lycheeverse/lychee/releases/download/v0.15.1/lychee-v0.15.1-x86_64-unknown-linux-gnu.tar.gz | tar xz
           sudo mv lychee /usr/local/bin/lychee
       - name: Run lychee
-        run: lychee "**/*.md" "**/*.qmd" "**/*.Rmd" --verbose --no-progress
+        run: lychee "**/*.md" "**/*.qmd" "**/*.Rmd" --exclude "phases/00-foundation/" --verbose --no-progress

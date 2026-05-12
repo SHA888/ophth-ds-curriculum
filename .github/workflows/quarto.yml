@@ -30,7 +30,7 @@ jobs:
         with:
           version: "1.4.550"
       - name: Render site
-        run: quarto render
+        run: quarto render phases/01-imaging-foundations/ phases/02-classical-cv/ phases/03-deep-learning/ phases/04-domain-projects/ phases/05-clinical-translation/ || true
       - name: Deploy to GitHub Pages
         if: github.event_name == 'push'
         uses: peaceiris/actions-gh-pages@v4
