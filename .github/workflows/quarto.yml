@@ -25,15 +25,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+      - name: Set up R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: "4.3"
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
         with:
           version: "1.4.550"
       - name: Render site
-        run: |
-          for dir in phases/01-imaging-foundations phases/02-classical-cv phases/03-deep-learning phases/04-domain-projects phases/05-clinical-translation; do
-            if [ -d "$dir" ]; then quarto render "$dir"; fi
-          done
+        run: quarto render
       - name: Deploy to GitHub Pages
         if: github.event_name == 'push'
         uses: peaceiris/actions-gh-pages@v4
