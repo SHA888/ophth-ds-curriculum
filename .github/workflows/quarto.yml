@@ -4,12 +4,20 @@ on:
   push:
     branches: [main]
     paths:
-      - '**/*.qmd'
-      - '_quarto.yml'
+      - "phases/01-*.qmd"
+      - "phases/02-*.qmd"
+      - "phases/03-*.qmd"
+      - "phases/04-*.qmd"
+      - "phases/05-*.qmd"
+      - "_quarto.yml"
   pull_request:
     paths:
-      - '**/*.qmd'
-      - '_quarto.yml'
+      - "phases/01-*.qmd"
+      - "phases/02-*.qmd"
+      - "phases/03-*.qmd"
+      - "phases/04-*.qmd"
+      - "phases/05-*.qmd"
+      - "_quarto.yml"
 
 jobs:
   render:
@@ -19,7 +27,7 @@ jobs:
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
         with:
-          version: '1.4.550'
+          version: "1.4.550"
       - name: Render site
         run: quarto render
       - name: Deploy to GitHub Pages
