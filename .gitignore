@@ -28,3 +28,13 @@ Thumbs.db
 
 # Jupyter Notebook
 .ipynb_checkpoints/
+
+/.quarto/
+
+# LaTeX/Quarto auxiliary
+*.aux
+*.log
+*.tex
+*.toc
+*.pdf
+*.html
