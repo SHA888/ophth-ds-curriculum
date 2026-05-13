@@ -32,7 +32,7 @@ jobs:
         with:
           version: "1.4.550"
       - name: Render site
-        run: quarto render phases/01-imaging-foundations
+        run: quarto render phases/01-imaging-foundations --to html
       - name: Deploy to GitHub Pages
         if: github.event_name == 'push'
         uses: peaceiris/actions-gh-pages@v4
