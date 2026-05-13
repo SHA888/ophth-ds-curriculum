@@ -15,3 +15,5 @@ jobs:
     uses: ./.github/workflows/gitleaks.yml
   call-render:
     uses: ./.github/workflows/quarto.yml
+    permissions:
+      contents: write
