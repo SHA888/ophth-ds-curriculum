@@ -19,6 +19,9 @@ on:
       - "phases/05-*.qmd"
       - "_quarto.yml"
   workflow_call:
+    secrets:
+      GH_PAT:
+        required: true
 
 jobs:
   render:
@@ -37,5 +40,5 @@ jobs:
         if: github.event_name == 'push'
         uses: peaceiris/actions-gh-pages@v4
         with:
-          github_token: ${{ secrets.GH_PAT }}
+          personal_token: ${{ secrets.GH_PAT }}
           publish_dir: ./_site

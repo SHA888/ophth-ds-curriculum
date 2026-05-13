@@ -17,3 +17,5 @@ jobs:
     uses: ./.github/workflows/quarto.yml
     permissions:
       contents: write
+    secrets:
+      GH_PAT: ${{ secrets.GH_PAT }}
