@@ -4,41 +4,52 @@ on:
   push:
     branches: [main]
     paths:
-      - "phases/01-*.qmd"
-      - "phases/02-*.qmd"
-      - "phases/03-*.qmd"
-      - "phases/04-*.qmd"
-      - "phases/05-*.qmd"
+      - "phases/01-imaging-foundations/**/*.qmd"
+      - "phases/02-classical-cv/**/*.qmd"
+      - "phases/03-deep-learning/**/*.qmd"
+      - "phases/04-domain-projects/**/*.qmd"
+      - "phases/05-clinical-translation/**/*.qmd"
       - "_quarto.yml"
   pull_request:
     paths:
-      - "phases/01-*.qmd"
-      - "phases/02-*.qmd"
-      - "phases/03-*.qmd"
-      - "phases/04-*.qmd"
-      - "phases/05-*.qmd"
+      - "phases/01-imaging-foundations/**/*.qmd"
+      - "phases/02-classical-cv/**/*.qmd"
+      - "phases/03-deep-learning/**/*.qmd"
+      - "phases/04-domain-projects/**/*.qmd"
+      - "phases/05-clinical-translation/**/*.qmd"
       - "_quarto.yml"
   workflow_call:
-    secrets:
-      GH_PAT:
-        required: true
 
 jobs:
   render:
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: read
     steps:
       - uses: actions/checkout@v6
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
         with:
           version: "1.4.550"
-      - name: Render site
+      - name: Render site (HTML)
         run: quarto render phases/01-imaging-foundations --to html
-      - name: Deploy to GitHub Pages
+      - name: Upload Pages artifact
         if: github.event_name == 'push'
-        uses: peaceiris/actions-gh-pages@v4
+        uses: actions/upload-pages-artifact@v3
         with:
-          personal_token: ${{ secrets.GH_PAT }}
-          publish_dir: ./_site
+          path: _site
+
+  deploy:
+    if: github.event_name == 'push'
+    needs: render
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
