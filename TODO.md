@@ -54,10 +54,10 @@
   - [x] T1.0.1 — `phases/00-foundation/README.qmd` documenting the import of `mds-curriculum` Tiers 1–2
   - [x] T1.0.2 — Diagnostic-accuracy statistics appendix (ophthalmology-flavored examples: screening prevalence, DR grades)
   - [x] T1.0.3 — Phase 0 assessment checklist
-- [ ] **T1.1 — Phase 1 module: image as ndarray**
-  - [ ] T1.1.1 — Reading: numpy array semantics, dtype, memory layout
-  - [ ] T1.1.2 — Exercise: load JPEG fundus, inspect shape/dtype, save round-trip
-  - [ ] T1.1.3 — Pitfalls: BGR vs. RGB, uint8 vs. float32 normalization
+- [x] **T1.1 — Phase 1 module: image as ndarray**
+  - [x] T1.1.1 — Reading: numpy array semantics, dtype, memory layout
+  - [x] T1.1.2 — Exercise: load JPEG fundus, inspect shape/dtype, save round-trip
+  - [x] T1.1.3 — Pitfalls: BGR vs. RGB, uint8 vs. float32 normalization
 - [ ] **T1.2 — Phase 1 module: color spaces and preprocessing**
   - [ ] T1.2.1 — Reading: RGB, HSV, LAB, why green channel dominates for fundus
   - [ ] T1.2.2 — Exercise: implement CLAHE manually, then via OpenCV; compare
