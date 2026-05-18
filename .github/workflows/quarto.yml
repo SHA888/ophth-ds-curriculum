@@ -35,7 +35,7 @@ jobs:
         run: quarto render phases/01-imaging-foundations --to html
       - name: Upload Pages artifact
         if: github.event_name == 'push'
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           path: _site
 
