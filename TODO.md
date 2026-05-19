@@ -58,10 +58,10 @@
   - [x] T1.1.1 — Reading: numpy array semantics, dtype, memory layout
   - [x] T1.1.2 — Exercise: load JPEG fundus, inspect shape/dtype, save round-trip
   - [x] T1.1.3 — Pitfalls: BGR vs. RGB, uint8 vs. float32 normalization
-- [ ] **T1.2 — Phase 1 module: color spaces and preprocessing**
-  - [ ] T1.2.1 — Reading: RGB, HSV, LAB, why green channel dominates for fundus
-  - [ ] T1.2.2 — Exercise: implement CLAHE manually, then via OpenCV; compare
-  - [ ] T1.2.3 — Pitfalls: CLAHE tile size, over-enhancement artifacts
+- [x] **T1.2 — Phase 1 module: color spaces and preprocessing**
+  - [x] T1.2.1 — Reading: RGB, HSV, LAB, why green channel dominates for fundus
+  - [x] T1.2.2 — Exercise: implement CLAHE manually, then via OpenCV; compare
+  - [x] T1.2.3 — Pitfalls: CLAHE tile size, over-enhancement artifacts
 - [ ] **T1.3 — Phase 1 module: file formats**
   - [ ] T1.3.1 — Reading: JPEG/TIFF/PNG trade-offs for fundus
   - [ ] T1.3.2 — Reading: DICOM basics (tags, transfer syntax) for ophthalmology

@@ -2,8 +2,48 @@
 title: Color Spaces and Preprocessing
 ---
 
-## Reading
+## Color Spaces: RGB, HSV, and LAB
 
-- RGB, HSV, LAB color spaces.
-- Why the green channel dominates in fundus images (hemoglobin absorption).
-- CLAHE (Contrast Limited Adaptive Histogram Equalization): motivation and parameters.
+### RGB (Red-Green-Blue)
+The native representation of digital images from cameras and displays. Each channel is device-dependent: a camera's red sensitivity differs from another's. For fundus images, the **green channel dominates** because hemoglobin (the pigment in blood) has a strong absorption peak in the green wavelength (~540 nm). This means retinal vessels appear as dark structures in the green channel with high contrast.
+
+**Trade-off:** Simple and hardware-native, but not perceptually uniform (equal RGB distances don't correspond to equal perceived color differences).
+
+### HSV (Hue-Saturation-Value)
+Decomposes color into perceptual axes: hue (color identity, 0–360°), saturation (color intensity), and value (brightness). Useful for applications where you want to manipulate "color" and "brightness" independently.
+
+**In fundus imaging:** HSV is rarely the first choice for vessel or disc detection because the retinal vasculature is low-saturation (nearly grayscale). However, it can help with removing illumination artifacts.
+
+### LAB (Perceptual Color Space)
+L* represents lightness (0–100, perceptually uniform), a* and b* represent color opponent dimensions (green–red and blue–yellow). This space is **perceptually uniform**: equal distances in LAB roughly correspond to equal perceived color differences.
+
+**In fundus imaging:** The L* channel is excellent for optic disc and Cup-to-Disc Ratio tasks because it captures intensity without color information. The uniform perceptual spacing makes LAB useful for preprocessing before machine learning.
+
+### Why Green Channel Dominates: Hemoglobin Absorption
+
+The absorption spectrum of hemoglobin (both oxygenated and deoxygenated) peaks around 540 nm (green light). Red blood cells absorb green light strongly, so vessels appear dark in the green channel. By contrast, red and blue channels have lower absorption at their respective wavelengths, yielding lower vessel-to-background contrast.
+
+**Practical rule of thumb:**
+- **Vessel and microaneurysm detection:** Use the green channel.
+- **Optic disc localization:** Use LAB L* channel (intensity without color bias).
+- **Multi-task pipelines:** Preprocess all three RGB channels for flexibility; let the downstream model learn which to emphasize.
+
+## CLAHE (Contrast Limited Adaptive Histogram Equalization)
+
+### Motivation
+Fundus images often suffer from uneven illumination (vignetting) and low local contrast in peripheral regions. Global histogram equalization (stretching the full image's intensity range) fails because it doesn't adapt to local context. **CLAHE** computes local histograms in small tiles, clips extreme values to prevent noise amplification, and redistributes clipped values. The result: enhanced local contrast while maintaining naturalness.
+
+### Key Parameters
+
+**Clip Limit:** Controls how much contrast is added. Higher values (e.g., 5.0) produce more aggressive enhancement but amplify sensor noise. Typical range: 1.5–3.0. OpenCV uses absolute pixel counts; scikit-image normalizes by tile size.
+
+**Tile Grid Size:** The contextual neighborhood for computing local histograms. Typical: 8×8 or 16×16 pixels. Too small (2×2) creates visible tile boundaries and amplifies noise; too large (64×64) reduces local effect and reverts to nearly global equalization.
+
+### When to Apply
+- Before vessel segmentation (enhances microvascular detail).
+- Before optic disc detection (equalizes illumination).
+- **Not** before machine learning classifiers trained on raw images (can cause domain shift).
+
+### When to Avoid
+- Already-preprocessed medical images (can double-enhance).
+- Downstream models trained on non-enhanced data (domain mismatch).

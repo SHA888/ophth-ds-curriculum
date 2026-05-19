@@ -1,18 +1,24 @@
 ---
-title: Exercise — Implement and Compare CLAHE
+title: Exercise — Compare CLAHE Implementations
 ---
 
 ## Objective
 
-Implement CLAHE manually (using `cv2.createCLAHE` or from scratch) and compare with OpenCV's built‑in implementation.
+Compare two standard library implementations of CLAHE on a fundus image:
+1. scikit-image's `equalize_adapthist` (reference implementation)
+2. OpenCV's `cv2.createCLAHE` (production-grade)
+
+Understand how parameters map between libraries and verify they produce similar results.
 
 ## Steps
 
-1. Load a fundus image (grayscale or green channel).
-2. Apply manual CLAHE: divide image into tiles, compute local histograms, clip, redistribute.
-3. Apply `cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))`.
-4. Display side‑by‑side and compute MSE between the two results (should be near zero if implemented correctly).
+1. Load a fundus image (RGB, e.g., a typical color fundus photograph).
+2. Apply CLAHE via scikit-image's `equalize_adapthist` with `clip_limit=2.0` and tile size 8.
+3. Apply OpenCV's `cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))` for comparison.
+4. Display all three side-by-side: original, scikit-image result, OpenCV result.
+5. Compute Mean Squared Error (MSE) between the two CLAHE results. Expect near-zero difference (numerical precision).
+6. Experiment: change tile grid size to 16×16 and observe the effect on local contrast.
 
 ## Deliverable
 
-Notebook `clahe_comparison.ipynb` or script `clahe_compare.py`.
+Script `exercise_clahe.py` that accepts an image path, applies both CLAHE methods, saves a comparison image, and prints the MSE.
